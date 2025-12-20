@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "modid",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Traf mod",
+	"description": "TRAF backwards reference",
 	"authors": [
 		"Me!"
 	],
@@ -16,10 +16,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"com.traf.TrafMod"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"com.traf.TrafModClient"
 		]
 	},
 	"mixins": [

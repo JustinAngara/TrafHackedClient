@@ -1,11 +1,21 @@
-package com.example;
+package com.traf;
 
+
+/*
+* How to run
+* ./gradlew runClient
+*
+* Build:
+* ./gradlew clean
+* ./gradlew build
+* Located in build/libs
+* */
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExampleMod implements ModInitializer {
+public class TrafMod implements ModInitializer {
 	public static final String MOD_ID = "modid";
 
 	// This logger is used to write text to the console and the log file.
@@ -20,5 +30,6 @@ public class ExampleMod implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Hello Fabric world!");
+
 	}
 }
