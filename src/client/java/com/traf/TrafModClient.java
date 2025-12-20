@@ -15,28 +15,36 @@ import net.minecraft.world.InteractionHand;
 
 import org.lwjgl.glfw.GLFW;
 
+import java.awt.*;
+
 public class TrafModClient implements ClientModInitializer {
 
 	private static long gameTicks=0;
-	private static KeyMapping swingKey;
 	private static HackManager hm;
-	private static int autoSwingCooldownTicks = 0;
-
-
 	private static Minecraft mc;
+	private static KeyListenerManager klm;
+
 	private Display d;
 
 	@Override
 	public void onInitializeClient() {
 		mc = Minecraft.getInstance();
 		hm = new HackManager();
-		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-			TrafMod.LOGGER.info("Joined a world session");
-		});
+
 
 		// add the keybinds
-		addKeybinds();
+        try {
+            klm = new KeyListenerManager();
+			klm.start();
+		} catch (AWTException e) {
+			throw new RuntimeException(e);
+		}
 
+
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			TrafMod.LOGGER.info("Joined a world session");
+
+		});
 		// add disply stuff
 		addDisplay();
 
@@ -65,34 +73,12 @@ public class TrafModClient implements ClientModInitializer {
 			if (client.player == null) return;
 			if (client.isPaused()) return;
 			LocalPlayer lp = client.player;
-			hm.run(lp, mc);
+			hm.run(lp);
 			gameTicks++;
 		});
 	}
 
-	public void addKeybinds(){
-		// add the keybinds
-		swingKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-				"key.modid.swing",
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_R,
-				KeyMapping.Category.MISC
-		));
 
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			// Cooldown tick-down
-			if (autoSwingCooldownTicks > 0) {
-				autoSwingCooldownTicks--;
-			}
+	public static Minecraft getMinecraft(){ return mc;}
 
-			// Manual swing key
-			while (swingKey.consumeClick()) {
-				if (client.player != null) {
-					client.player.swing(InteractionHand.MAIN_HAND);
-				}
-			}
-		});
-
-
-	}
 }

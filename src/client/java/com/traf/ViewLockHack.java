@@ -22,8 +22,8 @@ public class ViewLockHack extends Hack {
     private static final float ROTATION_SMOOTHING = 0.3f;
 
     @Override
-    public void run(LocalPlayer lp, Minecraft mc) {
-        if (lp == null || mc.level == null) return;
+    public void run(LocalPlayer lp) {
+        if (lp == null) return;
 
         Player target = findTarget(lp);
         if (target != null) {

@@ -10,7 +10,7 @@ public abstract class Hack {
 
 
 
-    public abstract void run(LocalPlayer lp, Minecraft mc);
+    public abstract void run(LocalPlayer lp);
 
     // helper methods
     public void setOn(boolean b){ isOn = b; }

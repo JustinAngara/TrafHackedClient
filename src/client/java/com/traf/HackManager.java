@@ -11,15 +11,21 @@ public class HackManager {
     private List<Hack> hacks = new ArrayList<>();
 
     public HackManager(){
-        hacks.add(new ViewLockHack()); //add hacks i want
+
+        //        hacks.add(new ViewLockHack()); //add hacks i want
 
     }
 
-    public void run(LocalPlayer lp, Minecraft mc){
+
+    /*
+    * This will loop through every hack that is queued up in this arraylist
+    * */
+    public void run(LocalPlayer lp){
+
         player = lp;
         // next run all the hacks
         for(Hack e : hacks){
-            e.run(player, mc);
+            e.run(player);
         }
 
     }
