@@ -9,15 +9,15 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class HitHack extends Hack {
 //    Robot r;
-    public HitHack() throws AWTException {
+    public HitHack()  {
 //        r = new Robot();
     }
     @Override
     public void run(LocalPlayer lp) {
         Minecraft mc = TrafModClient.getMinecraft();
         if (lp != null && mc.hitResult instanceof EntityHitResult ehr) {
-
-            mb1Attack();
+            // this is a low low attack, far better
+            HandleMouseOutput.leftClick();
 
             /* this is basically the packet version, but this is insafe
                 Entity target = ehr.getEntity();
@@ -28,10 +28,4 @@ public class HitHack extends Hack {
     }
 
 
-    // external to make it harder to detect
-    public void mb1Attack() {
-//        r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-//        r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-
-    }
 }
