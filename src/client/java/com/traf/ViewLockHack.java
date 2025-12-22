@@ -23,16 +23,17 @@ public class ViewLockHack extends Hack {
 
     @Override
     public void run(LocalPlayer lp) {
-        if (lp == null || isOn()==false) return;
+        if (lp == null) return;
 
         Player target = findTarget(lp);
         if (target != null) {
             lockView(lp, target);
+
         }
     }
 
-    // target
 
+    // target
     private Player findTarget(LocalPlayer lp) {
         List<Player> players = lp.level().getEntitiesOfClass(
                 Player.class,

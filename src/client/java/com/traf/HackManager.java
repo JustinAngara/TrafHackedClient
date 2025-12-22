@@ -11,12 +11,8 @@ public class HackManager {
     private List<Hack> hacks = new ArrayList<>();
 
     public HackManager(){
-
         hacks.add(new AutoAim());
-
-
     }
-
 
     public <T extends Hack> T getHack(Class<T> hackClass) {
         for (Hack hack : hacks) {

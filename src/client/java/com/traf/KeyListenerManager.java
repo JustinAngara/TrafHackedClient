@@ -32,6 +32,7 @@ public class KeyListenerManager {
                     // reverse teh switch
                     Hack temp = e.getValue();
                     temp.setOn(!temp.isOn());
+                    System.out.println("this is the value: "+temp.getClass()+" "+temp.isOn());
                 }
             }
 
