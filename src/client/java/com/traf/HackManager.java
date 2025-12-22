@@ -12,11 +12,20 @@ public class HackManager {
 
     public HackManager(){
 
-        //        hacks.add(new ViewLockHack()); //add hacks i want
+        hacks.add(new AutoAim());
+
 
     }
 
 
+    public <T extends Hack> T getHack(Class<T> hackClass) {
+        for (Hack hack : hacks) {
+            if (hackClass.isInstance(hack)) {
+                return hackClass.cast(hack);
+            }
+        }
+        return null;
+    }
     /*
     * This will loop through every hack that is queued up in this arraylist
     * */

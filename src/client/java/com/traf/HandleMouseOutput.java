@@ -3,7 +3,6 @@ package com.traf;
 import com.sun.jna.platform.win32.BaseTSD;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.DWORD;
-import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.INPUT;
 
 public final class HandleMouseOutput {
@@ -12,29 +11,31 @@ public final class HandleMouseOutput {
     public static final int MOUSEEVENTF_LEFTDOWN = 2;
     public static final int MOUSEEVENTF_LEFTUP   = 4;
 
-    private HandleMouseOutput() {}
 
-    public static void leftClick() {
-        INPUT[] inputs = (INPUT[]) new INPUT().toArray(2);
+    // pre-init everything
+    private static final INPUT[] LEFT_CLICK_INPUTS;
+    static{
+        LEFT_CLICK_INPUTS = (INPUT[]) new INPUT().toArray(2);
 
         // LEFT DOWN
-        inputs[0].type = new DWORD(INPUT.INPUT_MOUSE);
-        inputs[0].input.setType("mi");
-        inputs[0].input.mi.dwFlags = new DWORD(MOUSEEVENTF_LEFTDOWN);
-        inputs[0].input.mi.time = new DWORD(0);
-        inputs[0].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
+        LEFT_CLICK_INPUTS[0].type = new DWORD(INPUT.INPUT_MOUSE);
+        LEFT_CLICK_INPUTS[0].input.setType("mi");
+        LEFT_CLICK_INPUTS[0].input.mi.dwFlags = new DWORD(MOUSEEVENTF_LEFTDOWN);
+        LEFT_CLICK_INPUTS[0].input.mi.time = new DWORD(0);
+        LEFT_CLICK_INPUTS[0].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
 
         // LEFT UP
-        inputs[1].type = new DWORD(INPUT.INPUT_MOUSE);
-        inputs[1].input.setType("mi");
-        inputs[1].input.mi.dwFlags = new DWORD(MOUSEEVENTF_LEFTUP);
-        inputs[1].input.mi.time = new DWORD(0);
-        inputs[1].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
-
+        LEFT_CLICK_INPUTS[1].type = new DWORD(INPUT.INPUT_MOUSE);
+        LEFT_CLICK_INPUTS[1].input.setType("mi");
+        LEFT_CLICK_INPUTS[1].input.mi.dwFlags = new DWORD(MOUSEEVENTF_LEFTUP);
+        LEFT_CLICK_INPUTS[1].input.mi.time = new DWORD(0);
+        LEFT_CLICK_INPUTS[1].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
+    }
+    public static void leftClick() {
         USER32.SendInput(
-                new DWORD(inputs.length),
-                inputs,
-                inputs[0].size()
+                new DWORD(LEFT_CLICK_INPUTS.length),
+                LEFT_CLICK_INPUTS,
+                LEFT_CLICK_INPUTS[0].size()
         );
     }
 

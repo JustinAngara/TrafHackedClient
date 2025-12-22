@@ -33,12 +33,8 @@ public class TrafModClient implements ClientModInitializer {
 
 
 		// add the keybinds
-        try {
-            klm = new KeyListenerManager();
-			klm.start();
-		} catch (AWTException e) {
-			throw new RuntimeException(e);
-		}
+		klm = new KeyListenerManager(hm);
+		klm.start();
 
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {

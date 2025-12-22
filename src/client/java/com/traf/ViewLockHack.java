@@ -13,7 +13,7 @@ import java.util.List;
 public class ViewLockHack extends Hack {
 
 
-    private boolean wantInstant = false;
+    private boolean wantInstant = true;
 
     private static final double CLOSE_RANGE = 12.0;
     private static final double MAX_RANGE = 64.0;
@@ -105,7 +105,6 @@ public class ViewLockHack extends Hack {
 
     private void lockView(LocalPlayer lp, Player target) {
         Vec3 eye = lp.getEyePosition(1.0f);
-
         Vec3 aimPoint = getBiasedAimPoint(lp, target);
         Vec3 delta = aimPoint.subtract(eye);
 
@@ -118,15 +117,25 @@ public class ViewLockHack extends Hack {
                 Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))
         ));
 
+        if (wantInstant) {
+            // snap immediately
+            lp.setYRot(targetYaw);
+            lp.setXRot(targetPitch);
+            lp.yRotO = targetYaw;
+            lp.xRotO = targetPitch;
+            return;
+        }
+
+        // smooth lock
         float yaw = lerpAngle(lp.getYRot(), targetYaw, ROTATION_SMOOTHING);
         float pitch = lerp(lp.getXRot(), targetPitch, ROTATION_SMOOTHING);
 
         lp.setYRot(yaw);
         lp.setXRot(pitch);
-
         lp.yRotO = yaw;
         lp.xRotO = pitch;
     }
+
 
 
     // aim point

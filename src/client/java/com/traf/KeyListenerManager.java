@@ -14,13 +14,14 @@ import java.util.Map;
 public class KeyListenerManager {
     private static KeyMapping swingKey;
     private static Map<KeyMapping, Hack> km;
-
-    public KeyListenerManager() throws AWTException {
+    private HackManager hm;
+    public KeyListenerManager(HackManager hm) {
+        this.hm = hm;
         km = new HashMap<>();
-
         // create the key binds here
-        createKeyBind(new ViewLockHack(), "lock", GLFW.GLFW_KEY_R );
-        createKeyBind(new HitHack(), "HIT", GLFW.GLFW_KEY_V );
+//        createKeyBind(new ViewLockHack(), "LOCK", GLFW.GLFW_KEY_R );
+//        createKeyBind(new HitHack(), "HIT", GLFW.GLFW_KEY_V );
+        createKeyBind(this.hm.getHack(AutoAim.class), "autoaim", GLFW.GLFW_KEY_V);
     }
 
     public void start(){
@@ -28,8 +29,9 @@ public class KeyListenerManager {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for(Map.Entry<KeyMapping, Hack> e : km.entrySet()){
                 if(e.getKey().consumeClick()){
-                    System.out.println("this is assuming this shit works");
-                    e.getValue().run(client.player);
+                    // reverse teh switch
+                    Hack temp = e.getValue();
+                    temp.setOn(!temp.isOn());
                 }
             }
 
