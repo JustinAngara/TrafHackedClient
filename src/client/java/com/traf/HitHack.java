@@ -16,6 +16,7 @@ public class HitHack extends Hack {
     }
     @Override
     public void run(LocalPlayer lp) {
+        if(isOn()==false) return;
         Minecraft mc = TrafModClient.getMinecraft();
         if (lp != null && mc.hitResult instanceof EntityHitResult ehr) {
             // this is a low low attack, far better

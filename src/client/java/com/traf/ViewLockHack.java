@@ -23,7 +23,7 @@ public class ViewLockHack extends Hack {
 
     @Override
     public void run(LocalPlayer lp) {
-        if (lp == null) return;
+        if (lp == null || isOn()==false) return;
 
         Player target = findTarget(lp);
         if (target != null) {

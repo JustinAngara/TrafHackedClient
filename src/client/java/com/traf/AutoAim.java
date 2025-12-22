@@ -15,9 +15,8 @@ public class AutoAim extends Hack {
     }
     @Override
     public void run(LocalPlayer lp) {
-        while(this.isOn()){
-//            System.out.println("This works now in the auto aim");
-            vlh.run(lp);
-        }
+        if(isOn()==false) return;
+        vlh.run(lp);
+
     }
 }
