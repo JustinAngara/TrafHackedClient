@@ -7,7 +7,7 @@ import net.minecraft.client.player.LocalPlayer;
 public abstract class Hack {
 
     private boolean isOn = false;
-
+    private int currentTick = -1;
 
 
     public abstract void run(LocalPlayer lp);
@@ -15,4 +15,7 @@ public abstract class Hack {
     // helper methods
     public void setOn(boolean b){ isOn = b; }
     public boolean isOn(){ return isOn; }
+    public int getCurrentTick(){ return currentTick; }
+    public void setCurrentTick(int t){ currentTick = t; }
+    public void incrementTick(){ currentTick++; }
 }

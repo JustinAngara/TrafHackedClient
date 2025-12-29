@@ -13,6 +13,7 @@ public class HackManager {
     public HackManager(){
         hacks.add(new AutoAim());
         hacks.add(new Flight());
+        hacks.add(new Speed());
     }
 
     public <T extends Hack> T getHack(Class<T> hackClass) {
