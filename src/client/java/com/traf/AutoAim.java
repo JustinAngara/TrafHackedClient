@@ -18,6 +18,7 @@ public class AutoAim extends Hack {
     @Override
     public void run(LocalPlayer lp) {
         if(isOn()==false) return;
+        
         vlh.run(lp);
         hh.run(lp);
     }

@@ -16,9 +16,9 @@ public class HitHack extends Hack {
     }
     @Override
     public void run(LocalPlayer lp) {
-
+        if(lp == null) return;
         Minecraft mc = TrafModClient.getMinecraft();
-        if (lp != null && mc.hitResult instanceof EntityHitResult ehr) {
+        if (mc.hitResult instanceof EntityHitResult ehr) {
 
             //this is basically the packet version, but this is insafe
             HandleMouseOutput.leftClick();
