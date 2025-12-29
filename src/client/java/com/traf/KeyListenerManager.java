@@ -9,6 +9,8 @@ import org.lwjgl.glfw.GLFW;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 
 public class KeyListenerManager {
@@ -23,6 +25,7 @@ public class KeyListenerManager {
 //        createKeyBind(new HitHack(), "HIT", GLFW.GLFW_KEY_V );
         createKeyBind(this.hm.getHack(AutoAim.class), "autoaim", GLFW.GLFW_KEY_V);
         createKeyBind(this.hm.getHack(Flight.class), "flight", GLFW.GLFW_KEY_F);
+
     }
 
     public void start(){
@@ -32,21 +35,31 @@ public class KeyListenerManager {
                 if(e.getKey().consumeClick()){
                     // reverse teh switch
                     Hack temp = e.getValue();
-                    temp.setOn(!temp.isOn());
-                    System.out.println("this is the value: "+temp.getClass()+" "+temp.isOn());
+                    if(temp!=null){
+                        temp.setOn(!temp.isOn());
+                        System.out.println("this is the value: "+temp.getClass()+" "+temp.isOn());
+                        continue;
+                    }
+
+
                 }
             }
 
         });
     }
 
-    public void createKeyBind(Hack hack, String feature, int keyCode){
-        KeyMapping temp = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+    public KeyMapping getKeyMapping(String feature, int keyCode){
+        return KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.modid."+feature,
                 InputConstants.Type.KEYSYM,
                 keyCode,
                 KeyMapping.Category.MISC
         ));
+    }
+
+    public void createKeyBind(Hack hack, String feature, int keyCode){
+        KeyMapping temp = getKeyMapping(feature, keyCode);
         km.put(temp, hack);
     }
+
 }

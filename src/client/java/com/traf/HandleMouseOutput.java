@@ -8,8 +8,11 @@ import com.sun.jna.platform.win32.WinUser.INPUT;
 public final class HandleMouseOutput {
 
     private static final User32 USER32 = User32.INSTANCE;
+
     public static final int MOUSEEVENTF_LEFTDOWN = 2;
     public static final int MOUSEEVENTF_LEFTUP   = 4;
+
+    private static final int VK_SPACE = 0x20;
 
 
     // pre-init everything
@@ -31,6 +34,7 @@ public final class HandleMouseOutput {
         LEFT_CLICK_INPUTS[1].input.mi.time = new DWORD(0);
         LEFT_CLICK_INPUTS[1].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
     }
+
     public static void leftClick() {
         USER32.SendInput(
                 new DWORD(LEFT_CLICK_INPUTS.length),
@@ -39,5 +43,7 @@ public final class HandleMouseOutput {
         );
     }
 
-
+    public static boolean isSpaceHeld() {
+        return (USER32.GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
+    }
 }
