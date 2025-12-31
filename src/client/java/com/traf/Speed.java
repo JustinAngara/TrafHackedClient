@@ -13,7 +13,6 @@ public class Speed extends Hack {
         }
 
 
-
         int[] direction = HandleMouseOutput.getDirection();
 
         double speed = 0.2; // tweak
