@@ -12,14 +12,23 @@ public class Speed extends Hack {
             return;
         }
 
-
         int[] direction = HandleMouseOutput.getDirection();
+        double speed = 0.05;
 
-        double speed = 0.2; // tweak
+        float yaw = (float) Math.toRadians(lp.getYRot());
+
+        // direction[0] is strafe (left/right), direction[1] is forward/back
+        double forward = direction[1] * speed;
+        double strafe = direction[0] * speed;
+
+        // convert to x/z based on player rotation
+        double motionX = strafe * Math.cos(yaw) - forward * Math.sin(yaw);
+        double motionZ = forward * Math.cos(yaw) + strafe * Math.sin(yaw);
+
         lp.setDeltaMovement(
-                lp.getDeltaMovement().x + (direction[0]),
+                lp.getDeltaMovement().x + motionX,
                 lp.getDeltaMovement().y,
-                lp.getDeltaMovement().z + (direction[1])
+                lp.getDeltaMovement().z + motionZ
         );
         incrementTick();
     }

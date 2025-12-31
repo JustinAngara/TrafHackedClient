@@ -82,16 +82,19 @@ public final class HandleMouseOutput {
         int[] movement = getMovementHeld();
         int[] pair = new int[2]; // {x, z}
         int v1=0, v2=0;
+
+
         // x will be located in 0, 2
         if( movement[S]!=movement[W] && movement[W] == 1 ){
             v1 = 1;
-        } else {
+        } else if( movement[S]!=movement[W] && movement[S] == 1 ) {
             v1 = -1;
         }
+
         // z will be located in 1, 3
         if( movement[A]!=movement[D] && movement[D] == 1 ){
             v2 = 1;
-        } else {
+        } else if (movement[A]!=movement[D] && movement[A] == 1) {
             v2 = -1;
         }
 
