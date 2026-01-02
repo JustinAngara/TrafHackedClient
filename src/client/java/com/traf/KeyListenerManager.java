@@ -21,8 +21,6 @@ public class KeyListenerManager {
         this.hm = hm;
         km = new HashMap<>();
         // create the key binds here
-//        createKeyBind(new ViewLockHack(), "LOCK", GLFW.GLFW_KEY_R );
-//        createKeyBind(new HitHack(), "HIT", GLFW.GLFW_KEY_V );
         createKeyBind(this.hm.getHack(AutoAim.class), "autoaim", GLFW.GLFW_KEY_R);
         createKeyBind(this.hm.getHack(Flight.class), "flight", GLFW.GLFW_KEY_F);
         createKeyBind(this.hm.getHack(Speed.class), "speed", GLFW.GLFW_KEY_V);
@@ -39,8 +37,6 @@ public class KeyListenerManager {
                         temp.setOn(!temp.isOn());
                         System.out.println("this is the value: "+temp.getClass()+" "+temp.isOn());
                     }
-
-
                 }
             }
 
