@@ -1,4 +1,4 @@
-package com.traf.sub;
+package com.traf.hacks.sub;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;

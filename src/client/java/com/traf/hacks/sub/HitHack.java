@@ -1,4 +1,4 @@
-package com.traf.sub;
+package com.traf.hacks.sub;
 
 import com.traf.lifecycle.HandleKBMOutput;
 import com.traf.lifecycle.TrafModClient;

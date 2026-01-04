@@ -5,7 +5,7 @@ import com.traf.hacks.AutoAim;
 import com.traf.hacks.Flight;
 import com.traf.hacks.Hack;
 import com.traf.hacks.Speed;
-import com.traf.sub.SubHack;
+import com.traf.hacks.sub.SubHack;
 import net.minecraft.client.player.LocalPlayer;
 
 import java.util.ArrayList;

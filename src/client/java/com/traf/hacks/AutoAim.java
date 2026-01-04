@@ -1,7 +1,7 @@
 package com.traf.hacks;
 
-import com.traf.sub.HitHack;
-import com.traf.sub.ViewLockHack;
+import com.traf.hacks.sub.HitHack;
+import com.traf.hacks.sub.ViewLockHack;
 import net.minecraft.client.player.LocalPlayer;
 
 public class AutoAim extends Hack {
