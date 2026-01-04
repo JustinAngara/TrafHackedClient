@@ -8,14 +8,20 @@ public abstract class Hack {
 
     private boolean isOn = false;
     private int currentTick = -1;
+    private String name;
 
-
-    public abstract void run(LocalPlayer lp);
+    public Hack(String s){ name = s; }
+    public abstract boolean run(LocalPlayer lp);
 
     // helper methods
-    public void setOn(boolean b){ isOn = b; }
-    public boolean isOn(){ return isOn; }
-    public int getCurrentTick(){ return currentTick; }
-    public void setCurrentTick(int t){ currentTick = t; }
-    public void incrementTick(){ currentTick++; }
+    public void setOn(boolean b)       { isOn = b; }
+    public boolean isOn()              { return isOn; }
+
+    public int getCurrentTick()        { return currentTick; }
+    public void setCurrentTick(int t)  { currentTick = t; }
+
+    private String getName()           { return name; }
+    private void setName(String s)     { name = s; }
+
+    public void incrementTick()        { currentTick++; }
 }

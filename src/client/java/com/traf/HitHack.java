@@ -11,12 +11,14 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class HitHack extends Hack {
     ViewLockHack vh;
-    public HitHack()  {
-        vh = new ViewLockHack();
+    public HitHack(String s)  {
+        super(s);
+        // sub feature
+        vh = new ViewLockHack("View Lock Hack");
     }
     @Override
-    public void run(LocalPlayer lp) {
-        if(lp == null) return;
+    public boolean run(LocalPlayer lp) {
+        if(lp == null) return false;
         Minecraft mc = TrafModClient.getMinecraft();
         if (mc.hitResult instanceof EntityHitResult ehr) {
 
@@ -27,6 +29,7 @@ public class HitHack extends Hack {
 //            mc.gameMode.attack(mc.player, target);
 //            mc.player.swing(InteractionHand.MAIN_HAND);
         }
+        return true;
     }
 
 

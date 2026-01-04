@@ -7,19 +7,23 @@ import org.objectweb.asm.Handle;
  * this should send some 'flight' packet every ticket or something
  **/
 public class Flight extends Hack {
+    public Flight(String s){
+        super(s);
+    }
+
     public boolean isHoldingSpace(){
         return HandleMouseOutput.isSpaceHeld();
     }
     @Override
-    public void run(LocalPlayer lp) {
+    public boolean run(LocalPlayer lp) {
         if (!this.isOn() || !isHoldingSpace()) {
             setCurrentTick(-1);
-            return;
+            return false;
         }
 
         double upwardSpeed = 0.15; // tweak
         int[] movement = HandleMouseOutput.getMovementHeld();
-        if(movement.length!=4) return;
+        if(movement.length!=4) return true;
 
         lp.setDeltaMovement(
                 lp.getDeltaMovement().x,
@@ -27,5 +31,6 @@ public class Flight extends Hack {
                 lp.getDeltaMovement().z
         );
         incrementTick();
+        return true;
     }
 }

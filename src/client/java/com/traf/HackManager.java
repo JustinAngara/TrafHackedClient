@@ -11,9 +11,9 @@ public class HackManager {
     private List<Hack> hacks = new ArrayList<>();
 
     public HackManager(){
-        hacks.add(new AutoAim());
-        hacks.add(new Flight());
-        hacks.add(new Speed());
+        hacks.add(new AutoAim("Auto Aim"));
+        hacks.add(new Flight("Flight"));
+        hacks.add(new Speed("Speed"));
     }
 
     public <T extends Hack> T getHack(Class<T> hackClass) {
@@ -32,7 +32,9 @@ public class HackManager {
         player = lp;
         // next run all the hacks
         for(Hack e : hacks){
-            e.run(player);
+            if(e.run(player)) {
+
+            }
         }
 
     }

@@ -19,11 +19,12 @@ import java.awt.*;
 
 public class TrafModClient implements ClientModInitializer {
 
+	// this will be the lifetime of the world, not the indivdual hack runnign by itself
 	private static long gameTicks=0;
 	private static HackManager hm;
 	private static Minecraft mc;
 	private static KeyListenerManager klm;
-
+	private static float lastHealth = 20.0f;
 	private Display d;
 
 	@Override
@@ -51,9 +52,11 @@ public class TrafModClient implements ClientModInitializer {
 	public void addDisplay(){
 		d = new Display(mc);
 		HudElementRegistry.addLast(
-				Identifier.fromNamespaceAndPath(TrafMod.MOD_ID, "health_overlay"),(guiGraphics, deltaTracker)->{
-					d.run(guiGraphics);
-				});
+			// this gets repeatedly called per tick
+			Identifier.fromNamespaceAndPath(TrafMod.MOD_ID, "health_overlay"),(guiGraphics, deltaTracker)->{
+				d.run(guiGraphics);
+			}
+		);
 	}
 	public static long getGameTicks() { return gameTicks; }
 	public static void lockToGameTick(){
@@ -72,9 +75,20 @@ public class TrafModClient implements ClientModInitializer {
 			hm.run(lp);
 			gameTicks++;
 		});
+
+
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			if (client.player == null) return;
+
+			float currentHealth = client.player.getHealth();
+
+			if (currentHealth < lastHealth) {
+				System.out.println("You got damaged: "+currentHealth);
+			}
+
+			lastHealth = currentHealth;
+		});
 	}
 
-
-	public static Minecraft getMinecraft(){ return mc;}
-
+	public static Minecraft getMinecraft(){ return mc; }
 }

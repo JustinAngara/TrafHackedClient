@@ -11,25 +11,28 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class ViewLockHack extends Hack {
-
-
     private boolean wantInstant = true;
 
     private static final double CLOSE_RANGE = 12.0;
+
     private static final double MAX_RANGE = 64.0;
     private static final double MAX_AIM_OFFSET = 0.35;
-
     private static final float ROTATION_SMOOTHING = 0.3f;
 
+    public ViewLockHack(String s){
+        super(s);
+    }
+
     @Override
-    public void run(LocalPlayer lp) {
-        if (lp == null) return;
+    public boolean run(LocalPlayer lp) {
+        if (lp == null) return false;
 
         Player target = findTarget(lp);
         if (target != null) {
             lockView(lp, target);
 
         }
+        return true;
     }
 
 

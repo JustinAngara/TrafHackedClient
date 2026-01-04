@@ -4,18 +4,21 @@ import net.minecraft.client.player.LocalPlayer;
 import org.objectweb.asm.Handle;
 
 public class Speed extends Hack {
+    public Speed(String s){
+        super(s);
+    }
 
     @Override
-    public void run(LocalPlayer lp) {
+    public boolean run(LocalPlayer lp) {
         if (!this.isOn()) {
             setCurrentTick(-1);
-            return;
+            return false;
         }
 
         int[] direction = HandleMouseOutput.getDirection();
         final int X = 0, Z = 1;
         if (direction[X] == 0 && direction[Z] == 0) {
-            return;
+            return true;
         }
 
         double speed = 0.5;
@@ -33,5 +36,6 @@ public class Speed extends Hack {
         );
 
         incrementTick();
+        return true;
     }
 }
