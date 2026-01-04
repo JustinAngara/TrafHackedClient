@@ -23,7 +23,7 @@ public class HitHack extends Hack {
         if (mc.hitResult instanceof EntityHitResult ehr) {
 
             //this is basically the packet version, but this is insafe
-            HandleMouseOutput.leftClick();
+            HandleKBMOutput.leftClick();
 
 //            Entity target = ehr.getEntity();
 //            mc.gameMode.attack(mc.player, target);

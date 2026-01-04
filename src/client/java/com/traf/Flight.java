@@ -12,7 +12,7 @@ public class Flight extends Hack {
     }
 
     public boolean isHoldingSpace(){
-        return HandleMouseOutput.isSpaceHeld();
+        return HandleKBMOutput.isSpaceHeld();
     }
     @Override
     public boolean run(LocalPlayer lp) {
@@ -22,7 +22,7 @@ public class Flight extends Hack {
         }
 
         double upwardSpeed = 0.15; // tweak
-        int[] movement = HandleMouseOutput.getMovementHeld();
+        int[] movement = HandleKBMOutput.getMovementHeld();
         if(movement.length!=4) return true;
 
         lp.setDeltaMovement(

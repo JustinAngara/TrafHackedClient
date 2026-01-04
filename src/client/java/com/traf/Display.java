@@ -59,15 +59,15 @@ public class Display {
     }
 
     public static void addDisplayHack(String hack){
-        hackTitles.add(hack);
-    }
-
-    public static void removeDisplayHack(String hack){
-        for(int i = 0; i < hackTitles.size(); i++){
-            if(hackTitles.equals(hack)) hackTitles.remove(i);
-            return;
+        if (!hackTitles.contains(hack)) {
+            hackTitles.add(hack);
         }
     }
+
+    public static void removeDisplayHack(String hack) {
+        hackTitles.removeIf(h -> h.equals(hack));
+    }
+
 
     public void displayLifetime(){
         guiGraphics.drawString(

@@ -32,8 +32,13 @@ public class HackManager {
         player = lp;
         // next run all the hacks
         for(Hack e : hacks){
-            if(e.run(player)) {
+            e.run(player);
 
+            // update title
+            if(e.isOn()) {
+                Display.addDisplayHack(e.getName());
+            } else {
+                Display.removeDisplayHack(e.getName());
             }
         }
 

@@ -15,7 +15,7 @@ public class Speed extends Hack {
             return false;
         }
 
-        int[] direction = HandleMouseOutput.getDirection();
+        int[] direction = HandleKBMOutput.getDirection();
         final int X = 0, Z = 1;
         if (direction[X] == 0 && direction[Z] == 0) {
             return true;

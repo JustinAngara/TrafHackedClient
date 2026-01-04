@@ -53,7 +53,7 @@ public class TrafModClient implements ClientModInitializer {
 		d = new Display(mc);
 		HudElementRegistry.addLast(
 			// this gets repeatedly called per tick
-			Identifier.fromNamespaceAndPath(TrafMod.MOD_ID, "health_overlay"),(guiGraphics, deltaTracker)->{
+			Identifier.fromNamespaceAndPath(TrafMod.MOD_ID, "hack_list"),(guiGraphics, deltaTracker)->{
 				d.run(guiGraphics);
 			}
 		);

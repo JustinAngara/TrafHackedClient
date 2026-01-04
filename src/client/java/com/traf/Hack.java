@@ -20,8 +20,8 @@ public abstract class Hack {
     public int getCurrentTick()        { return currentTick; }
     public void setCurrentTick(int t)  { currentTick = t; }
 
-    private String getName()           { return name; }
-    private void setName(String s)     { name = s; }
+    public String getName()           { return name; }
+    public void setName(String s)     { name = s; }
 
     public void incrementTick()        { currentTick++; }
 }
