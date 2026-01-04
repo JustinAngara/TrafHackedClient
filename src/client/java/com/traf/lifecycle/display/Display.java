@@ -67,14 +67,18 @@ public class Display {
         );
     }
 
-    public static void addDisplayHack(String hack){
+
+
+    public static boolean addDisplayHack(String hack){
         if (!hackTitles.contains(hack)) {
             hackTitles.add(hack);
+            return true;
         }
+        return false;
     }
 
-    public static void removeDisplayHack(String hack) {
-        hackTitles.removeIf(h -> h.equals(hack));
+    public static boolean removeDisplayHack(String hack) {
+        return hackTitles.removeIf(h -> h.equals(hack));
     }
 
 

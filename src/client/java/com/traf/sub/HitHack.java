@@ -6,9 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.phys.EntityHitResult;
 
-
-
-
 public class HitHack extends SubHack {
 
     public HitHack(String s)  {
@@ -16,19 +13,18 @@ public class HitHack extends SubHack {
     }
     @Override
     public boolean run(LocalPlayer lp) {
-        if(lp == null) return false;
         Minecraft mc = TrafModClient.getMinecraft();
-        if (mc.hitResult instanceof EntityHitResult ehr) {
-
-            //this is basically the packet version, but this is insafe
+        if (mc.hitResult instanceof EntityHitResult ehr) { // only use ehr if you want to perform packet click
+            // this will perform external windows mouse click
             HandleKBMOutput.leftClick();
+        }
+        return true;
+    }
+
 
 //            Entity target = ehr.getEntity();
 //            mc.gameMode.attack(mc.player, target);
 //            mc.player.swing(InteractionHand.MAIN_HAND);
-        }
-        return true;
-    }
 
 
 }

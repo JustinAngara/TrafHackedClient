@@ -6,7 +6,6 @@ import com.traf.hacks.Hack;
 public abstract class SubHack extends Hack {
     public SubHack(String s) {
         super(s);
-        setOn(true);
 
     }
 

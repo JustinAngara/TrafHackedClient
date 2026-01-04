@@ -26,8 +26,6 @@ public class ViewLockHack extends SubHack {
 
     @Override
     public boolean run(LocalPlayer lp) {
-        if (lp == null) return false;
-
         Player target = findTarget(lp);
         if (target != null) {
             lockView(lp, target);

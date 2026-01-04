@@ -1,3 +1,8 @@
+/**
+ * MAY SAFELY IGNORE THIS FILE FOR NOW
+ * DOESN'T CHANGE EXTERNAL FUNCTIONALITY
+ * */
+
 package com.traf.mixin.client;
 
 import net.minecraft.client.Minecraft;
