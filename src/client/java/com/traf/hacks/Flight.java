@@ -1,7 +1,7 @@
-package com.traf;
+package com.traf.hacks;
 
+import com.traf.lifecycle.HandleKBMOutput;
 import net.minecraft.client.player.LocalPlayer;
-import org.objectweb.asm.Handle;
 
 /**
  * this should send some 'flight' packet every ticket or something

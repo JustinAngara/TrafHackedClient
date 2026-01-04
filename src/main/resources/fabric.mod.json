@@ -19,7 +19,7 @@
 			"com.traf.TrafMod"
 		],
 		"client": [
-			"com.traf.TrafModClient"
+          "com.traf.lifecycle.TrafModClient"
 		]
 	},
 	"mixins": [

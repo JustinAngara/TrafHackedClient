@@ -1,11 +1,13 @@
-package com.traf;
+package com.traf.hacks;
 
+import com.traf.sub.HitHack;
+import com.traf.sub.ViewLockHack;
 import net.minecraft.client.player.LocalPlayer;
 
 public class AutoAim extends Hack {
     // create a reference to View Lock Hack
-    static ViewLockHack vlh;
-    static HitHack hh;
+    private static ViewLockHack vlh;
+    private static HitHack hh;
     static{
         vlh = new ViewLockHack("View Lock Hack");
         hh = new HitHack("Hit Hack");

@@ -1,20 +1,18 @@
-package com.traf;
+package com.traf.sub;
 
+import com.traf.lifecycle.HandleKBMOutput;
+import com.traf.lifecycle.TrafModClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
 
 
 
 
-public class HitHack extends Hack {
-    ViewLockHack vh;
+public class HitHack extends SubHack {
+
     public HitHack(String s)  {
         super(s);
-        // sub feature
-        vh = new ViewLockHack("View Lock Hack");
     }
     @Override
     public boolean run(LocalPlayer lp) {

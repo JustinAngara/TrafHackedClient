@@ -1,6 +1,5 @@
-package com.traf;
+package com.traf.hacks;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 
 // inteded to inherint some stuff

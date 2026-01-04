@@ -1,6 +1,5 @@
-package com.traf;
+package com.traf.sub;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -10,7 +9,8 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class ViewLockHack extends Hack {
+
+public class ViewLockHack extends SubHack {
     private boolean wantInstant = true;
 
     private static final double CLOSE_RANGE = 12.0;
@@ -22,6 +22,7 @@ public class ViewLockHack extends Hack {
     public ViewLockHack(String s){
         super(s);
     }
+
 
     @Override
     public boolean run(LocalPlayer lp) {
@@ -41,9 +42,7 @@ public class ViewLockHack extends Hack {
         List<Player> players = lp.level().getEntitiesOfClass(
                 Player.class,
                 lp.getBoundingBox().inflate(MAX_RANGE),
-                p -> p.isAlive()
-                        && p != lp
-                        && !p.isSpectator()
+                p -> p.isAlive() && p != lp  && !p.isSpectator() // basically just condiitons
         );
 
         // closest visible player within CLOSE_RANGE

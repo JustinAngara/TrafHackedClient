@@ -2,6 +2,8 @@ package com.traf;
 
 
 /*
+* CLIENT RELATED CODE WILL BE IN CLIENT DIR
+*
 * How to run
 * ./gradlew runClient
 *

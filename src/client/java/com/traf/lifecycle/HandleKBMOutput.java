@@ -1,4 +1,4 @@
-package com.traf;
+package com.traf.lifecycle;
 
 import com.sun.jna.platform.win32.BaseTSD;
 import com.sun.jna.platform.win32.User32;

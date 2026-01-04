@@ -1,21 +1,15 @@
-package com.traf;
+package com.traf.lifecycle;
 
-import com.mojang.blaze3d.platform.InputConstants;
+import com.traf.TrafMod;
+import com.traf.lifecycle.display.Display;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.InteractionHand;
-
-import org.lwjgl.glfw.GLFW;
-
-import java.awt.*;
 
 public class TrafModClient implements ClientModInitializer {
 
@@ -36,7 +30,6 @@ public class TrafModClient implements ClientModInitializer {
 		// add the keybinds
 		klm = new KeyListenerManager(hm);
 		klm.start();
-
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			TrafMod.LOGGER.info("Joined a world session");

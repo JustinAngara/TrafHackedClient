@@ -1,16 +1,17 @@
-package com.traf;
+package com.traf.lifecycle;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.traf.hacks.AutoAim;
+import com.traf.hacks.Flight;
+import com.traf.hacks.Hack;
+import com.traf.hacks.Speed;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 
 public class KeyListenerManager {
