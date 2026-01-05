@@ -1,10 +1,7 @@
 package com.traf.lifecycle;
 
+import com.traf.hacks.*;
 import com.traf.lifecycle.display.Display;
-import com.traf.hacks.AutoAim;
-import com.traf.hacks.Flight;
-import com.traf.hacks.Hack;
-import com.traf.hacks.Speed;
 import com.traf.hacks.sub.SubHack;
 import net.minecraft.client.player.LocalPlayer;
 
@@ -19,6 +16,7 @@ public class HackManager {
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoAim("Auto Aim"));
+        hacks.add(new AutoHeal("AutoHeal"));
     }
 
     public <T extends Hack> T getHack(Class<T> hackClass) {
