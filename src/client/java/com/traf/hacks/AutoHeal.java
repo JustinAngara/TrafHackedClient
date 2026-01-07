@@ -39,6 +39,14 @@ import java.util.List;
  * [18:55:46] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 2 | item.minecraft.mushroom_stew x1
  * [18:55:46] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 3 | item.minecraft.mushroom_stew x1
  *
+ *
+ * slots are performed through
+ * 9 10 11 12 13 14 ... (top of the inventory top left corner)
+ *
+ *
+ *
+ * 0 1 2 3 4 5 6 7 8 (hotbar)
+ *
  * */
 public class AutoHeal extends Hack {
     public enum HealType{     // what type of it is it
@@ -73,27 +81,44 @@ public class AutoHeal extends Hack {
 
 
             if(stack.is(Items.MUSHROOM_STEW)){
-                slots.add(new ItemSlot(slot, HealType.SOUP);
+                slots.add(new ItemSlot(slot, HealType.SOUP));
                 continue;
             }
 
+
+            // get contents as if the item/stack is a potion
             potionContents = stack.get(DataComponents.POTION_CONTENTS);
-            if( potionContents != null || !stack.is(Items.SPLASH_POTION)) continue;
-
-            if (potionContents.potion().isPresent() && potionContents.potion().get() == Potions.HEALING) {
-                slots.add(new ItemSlot(slot, HealType.HEALING));
+            // do contents exist and is it a splash potion
+            if( potionContents != null && stack.is(Items.SPLASH_POTION) ) {
+                // check for healing
+                if (potionContents.potion().isPresent() && potionContents.potion().get() == Potions.HEALING) {
+                    slots.add(new ItemSlot(slot, HealType.HEALING));
+                }
             }
-
-
         }
 
-        return false;
+        printStack(slots);
+
+        // now perform auto heal
+
+        return true;
+
     }
 
+    private void runHeal(List<ItemSlot> stacks) {
+        // pick the closest one to the hotbar
+        // if it is between values 1-9 => indecies 0-8, that means we are able to directly press [1,9] and press left click
+
+    }
+
+    private void printStack(List<ItemSlot> stacks) {
+        for(ItemSlot e : stacks){
+            System.out.println(e.toString());
+        }
+    }
 
     private static class ItemSlot {
 
-        private ItemSlot item; // return an item reference to itself (quantity is always one)
         private int slot;      // where its located
         private AutoHeal.HealType type;
 
@@ -103,5 +128,10 @@ public class AutoHeal extends Hack {
         }
 
         ItemSlot getItemSlot(){ return this; }
+
+        @Override
+        public String toString(){
+            return "Slot: "+slot+"\nHealType: "+ (type==HealType.HEALING ? "HEAL POT" : "SOUP");
+        }
     }
 }
