@@ -1,9 +1,12 @@
 package com.traf.hacks;
 
 import com.traf.hacks.sub.HitHack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -14,101 +17,108 @@ import net.minecraft.world.item.alchemy.Potions;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 15 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 16 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 17 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 18 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 19 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 20 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 21 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 22 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 23 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 24 | item.minecraft.splash_potion x1
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 0 | item.minecraft.cooked_beef x63
- * [23:22:43] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 9 | item.minecraft.splash_potion x1
- *
- *
- * [18:55:42] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 0 | item.minecraft.cooked_beef x62
- * [18:55:42] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 1 | item.minecraft.bowl x1
- * [18:55:42] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 0 | item.minecraft.cooked_beef x62
- * [18:55:42] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 1 | item.minecraft.bowl x1
- * [18:55:42] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 1 | item.minecraft.bowl x1
- * [18:55:42] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 1 | item.minecraft.bowl x1
- * [18:55:46] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 1 | item.minecraft.mushroom_stew x1
- * [18:55:46] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 2 | item.minecraft.mushroom_stew x1
- * [18:55:46] [Render thread/INFO] (Minecraft) [STDOUT]: Slot 3 | item.minecraft.mushroom_stew x1
- *
- *
- * slots are performed through
- * 9 10 11 12 13 14 ... (top of the inventory top left corner)
- *
- *
- *
- * 0 1 2 3 4 5 6 7 8 (hotbar)
- *
- * */
 public class AutoHeal extends Hack {
-    public enum HealType{     // what type of it is it
+    private int lastRan = -1;
+    private final int delay = 15;
+    public enum HealType{
         HEALING,
         SOUP
     };
 
     public AutoHeal(String s) {
         super(s);
+        setOn(true);
     }
 
     @Override
     public boolean run(LocalPlayer lp) {
         if(lp == null) return false;
 
-        // get inventory to see where the pot is
         Inventory inv = lp.getInventory();
         ItemStack stack;
         PotionContents potionContents;
 
-        List<ItemSlot> slots = new ArrayList<>();
+        int itemInHotbar = findHealItem(inv, 0, 9);
 
-        for (int slot = 0; slot < inv.getContainerSize(); slot++) {
-            stack = inv.getItem(slot);
-            if (stack.isEmpty()) continue;
-
-            System.out.println(
-                    "Slot " + slot +
-                            " | " + stack.getItem().getDescriptionId() +
-                            " x" + stack.getCount()
-            );
-
+        if(itemInHotbar != -1) {
+            List<ItemSlot> slots = new ArrayList<>();
+            stack = inv.getItem(itemInHotbar);
 
             if(stack.is(Items.MUSHROOM_STEW)){
-                slots.add(new ItemSlot(slot, HealType.SOUP));
-                continue;
+                slots.add(new ItemSlot(itemInHotbar, HealType.SOUP));
+            } else {
+                potionContents = stack.get(DataComponents.POTION_CONTENTS);
+                if(potionContents != null && stack.is(Items.SPLASH_POTION)) {
+                    if(potionContents.potion().isPresent() && potionContents.potion().get() == Potions.HEALING) {
+                        slots.add(new ItemSlot(itemInHotbar, HealType.HEALING));
+                    }
+                }
             }
 
+            runHeal(lp, slots);
+            incrementTick();
+            lastRan = getCurrentTick();
+            return true;
+        }
 
-            // get contents as if the item/stack is a potion
+        int itemInInventory = findHealItem(inv, 9, 36);
+
+        if(itemInInventory != -1) {
+            Minecraft.getInstance().gameMode.handleInventoryMouseClick(0, itemInInventory, 0, ClickType.QUICK_MOVE, lp);
+        }
+
+        incrementTick();
+        lastRan = getCurrentTick();
+        return true;
+    }
+
+    private int findHealItem(Inventory inv, int startSlot, int endSlot) {
+        ItemStack stack;
+        PotionContents potionContents;
+
+        for(int i = startSlot; i < endSlot; i++) {
+            stack = inv.getItem(i);
+            if(stack.isEmpty()) continue;
+
+            if(stack.is(Items.MUSHROOM_STEW)){
+                return i;
+            }
+
             potionContents = stack.get(DataComponents.POTION_CONTENTS);
-            // do contents exist and is it a splash potion
-            if( potionContents != null && stack.is(Items.SPLASH_POTION) ) {
-                // check for healing
-                if (potionContents.potion().isPresent() && potionContents.potion().get() == Potions.HEALING) {
-                    slots.add(new ItemSlot(slot, HealType.HEALING));
+            if(potionContents != null && stack.is(Items.SPLASH_POTION)) {
+                if(potionContents.potion().isPresent() && potionContents.potion().get() == Potions.HEALING) {
+                    return i;
                 }
             }
         }
 
-        printStack(slots);
-
-        // now perform auto heal
-
-        return true;
-
+        return -1;
     }
 
-    private void runHeal(List<ItemSlot> stacks) {
-        // pick the closest one to the hotbar
-        // if it is between values 1-9 => indecies 0-8, that means we are able to directly press [1,9] and press left click
+    private void useItem(LocalPlayer lp, HealType type) {
+        Minecraft mc = Minecraft.getInstance();
+        if(!(lp.getHealth() < lp.getMaxHealth() * 0.75)) return;
+        if(type == HealType.HEALING) {
+            float oldPitch = lp.getXRot();
+            lp.setXRot(85);
+            mc.gameMode.useItem(lp, InteractionHand.MAIN_HAND);
+            lp.setXRot(oldPitch);
+        }
+        else if(type == HealType.SOUP) {
+            mc.gameMode.useItem(lp, InteractionHand.MAIN_HAND);
+        }
+    }
 
+    private void runHeal(LocalPlayer lp, List<ItemSlot> stacks) {
+        if(stacks.isEmpty()) return;
+
+        for(ItemSlot itemSlot : stacks) {
+            if(itemSlot.slot >= 0 && itemSlot.slot <= 8) {
+                lp.getInventory().setSelectedSlot(itemSlot.slot);
+                useItem(lp, itemSlot.type);
+                return;
+            }
+        }
     }
 
     private void printStack(List<ItemSlot> stacks) {
@@ -118,8 +128,7 @@ public class AutoHeal extends Hack {
     }
 
     private static class ItemSlot {
-
-        private int slot;      // where its located
+        private int slot;
         private AutoHeal.HealType type;
 
         public ItemSlot(int slot, AutoHeal.HealType type){
