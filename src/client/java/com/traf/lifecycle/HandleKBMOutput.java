@@ -5,12 +5,16 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.DWORD;
 import com.sun.jna.platform.win32.WinUser.INPUT;
 
+import static org.lwjgl.system.windows.User32.MOUSEEVENTF_RIGHTDOWN;
+
 public final class HandleKBMOutput {
 
     private static final User32 USER32 = User32.INSTANCE;
 
-    public static final int MOUSEEVENTF_LEFTDOWN = 2;
-    public static final int MOUSEEVENTF_LEFTUP   = 4;
+    public static final int MOUSEEVENTF_LEFTDOWN  = 0x0002;
+    public static final int MOUSEEVENTF_LEFTUP    = 0x0004;
+    public static final int MOUSEEVENTF_RIGHTDOWN = 0x0008;
+    public static final int MOUSEEVENTF_RIGHTUP   = 0x0010;
 
     private static final int VK_SPACE = 0x20;
 
@@ -24,32 +28,37 @@ public final class HandleKBMOutput {
 
 
     // pre-init everything
-    private static final INPUT[] LEFT_CLICK_INPUTS;
-    static{
-        LEFT_CLICK_INPUTS = (INPUT[]) new INPUT().toArray(2);
+    private static final INPUT[] CLICK_INPUTS;
+    private static int MouseEventLRClick = MOUSEEVENTF_LEFTDOWN;
+    static {
+        CLICK_INPUTS = (INPUT[]) new INPUT().toArray(2);
 
-        // LEFT DOWN
-        LEFT_CLICK_INPUTS[0].type = new DWORD(INPUT.INPUT_MOUSE);
-        LEFT_CLICK_INPUTS[0].input.setType("mi");
-        LEFT_CLICK_INPUTS[0].input.mi.dwFlags = new DWORD(MOUSEEVENTF_LEFTDOWN);
-        LEFT_CLICK_INPUTS[0].input.mi.time = new DWORD(0);
-        LEFT_CLICK_INPUTS[0].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
+        for (int i = 0; i < 2; i++) {
+            CLICK_INPUTS[i].type = new DWORD(INPUT.INPUT_MOUSE);
+            CLICK_INPUTS[i].input.setType("mi");
+            CLICK_INPUTS[i].input.mi.time = new DWORD(0);
+            CLICK_INPUTS[i].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
 
-        // LEFT UP
-        LEFT_CLICK_INPUTS[1].type = new DWORD(INPUT.INPUT_MOUSE);
-        LEFT_CLICK_INPUTS[1].input.setType("mi");
-        LEFT_CLICK_INPUTS[1].input.mi.dwFlags = new DWORD(MOUSEEVENTF_LEFTUP);
-        LEFT_CLICK_INPUTS[1].input.mi.time = new DWORD(0);
-        LEFT_CLICK_INPUTS[1].input.mi.dwExtraInfo = new BaseTSD.ULONG_PTR(0);
+        }
     }
 
-    public static void leftClick() {
-        USER32.SendInput(
-                new DWORD(LEFT_CLICK_INPUTS.length),
-                LEFT_CLICK_INPUTS,
-                LEFT_CLICK_INPUTS[0].size()
-        );
+
+    public static void mouseClick(boolean wantLeft) {
+        int down = wantLeft ? MOUSEEVENTF_LEFTDOWN  : MOUSEEVENTF_RIGHTDOWN;
+        int up   = wantLeft ? MOUSEEVENTF_LEFTUP    : MOUSEEVENTF_RIGHTUP;
+
+        CLICK_INPUTS[0].input.mi.dwFlags = new DWORD(down);
+        CLICK_INPUTS[1].input.mi.dwFlags = new DWORD(up);
+
+        CLICK_INPUTS[0].write();
+        CLICK_INPUTS[1].write();
+
+        int sent = USER32.SendInput(new DWORD(2), CLICK_INPUTS, CLICK_INPUTS[0].size()).intValue();
+        if (sent != 2) { /* implement if fail */}
     }
+
+
+
 
     public static int[] getMovementHeld(){
         // wasd (+, -, -, +)

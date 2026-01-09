@@ -16,7 +16,7 @@ public class HitHack extends SubHack {
         Minecraft mc = TrafModClient.getMinecraft();
         if (mc.hitResult instanceof EntityHitResult ehr) { // only use ehr if you want to perform packet click
             // this will perform external windows mouse click
-            HandleKBMOutput.leftClick();
+            HandleKBMOutput.mouseClick(false);
         }
         return true;
     }
