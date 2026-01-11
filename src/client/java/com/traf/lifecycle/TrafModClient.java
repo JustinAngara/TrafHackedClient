@@ -2,6 +2,7 @@ package com.traf.lifecycle;
 
 import com.traf.TrafMod;
 import com.traf.lifecycle.display.Display;
+import com.traf.lifecycle.menu.Menu;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -33,6 +34,7 @@ public class TrafModClient implements ClientModInitializer {
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			TrafMod.LOGGER.info("Joined a world session");
+			mc.setScreen(new Menu(mc.screen));
 
 		});
 		// add disply stuff
