@@ -1,5 +1,6 @@
 package com.traf.lifecycle.menu;
 
+import com.traf.hacks.Hack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 public class ClientButton extends AbstractButton {
-    private final Runnable onPress;
+    private final Object onPress;
     private float hoverAnim = 0f;
 
     // theme
@@ -21,15 +22,23 @@ public class ClientButton extends AbstractButton {
     private static final int TXT_HOVER = 0xFFFFFFFF;
     private static final int ACCENT_RGB = 0x00B2FF; // rgb only
 
+    public ClientButton(int x, int y, int w, int h, Component message, Hack onPress) {
+        super(x, y, w, h, message);
+        this.onPress = onPress;
+    }
+
+    // close method
     public ClientButton(int x, int y, int w, int h, Component message, Runnable onPress) {
         super(x, y, w, h, message);
         this.onPress = onPress;
     }
 
-
     @Override
     public void onPress(InputWithModifiers inputWithModifiers) {
-
+        if(onPress instanceof Hack) {
+            Hack temp = (Hack) onPress;
+            temp.setOn(!temp.isOn());
+        }
     }
 
     @Override

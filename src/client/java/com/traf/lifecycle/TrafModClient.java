@@ -34,7 +34,9 @@ public class TrafModClient implements ClientModInitializer {
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			TrafMod.LOGGER.info("Joined a world session");
-			mc.setScreen(new Menu(mc.screen));
+
+			// this is where the mneu is
+			mc.setScreen(new Menu(mc.screen, hm));
 
 		});
 		// add disply stuff

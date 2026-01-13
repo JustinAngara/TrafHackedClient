@@ -27,6 +27,7 @@ public class HackManager {
         }
         return null;
     }
+
     /*
     * This will loop through every hack that is queued up in this arraylist
     * */
@@ -47,4 +48,5 @@ public class HackManager {
         }
 
     }
+    public List<Hack> getAllHacks(){ return hacks; }
 }

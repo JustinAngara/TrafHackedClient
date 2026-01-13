@@ -1,5 +1,7 @@
 package com.traf.lifecycle.menu;
 
+import com.traf.hacks.Hack;
+import com.traf.lifecycle.HackManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -7,41 +9,54 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
+import java.util.List;
+
 public class Menu extends Screen {
     private final Screen parent;
-
+    private HackManager hm;
     private EditBox textField;
 
     private final int backgroundWidth = 190;
     private final int backgroundHeight = 170;
 
-    private int x, y;
+    private int x, y, yDelta = 28;
 
-    public Menu(Screen parent) {
-        super(Component.literal("client menu"));
+
+
+    public Menu(Screen parent, HackManager hm) {
+        super(Component.literal("Traf Client Menu"));
         this.parent = parent;
+        this.hm = hm;
     }
 
+    // these are where components go to
     @Override
     protected void init() {
         this.x = (this.width - this.backgroundWidth) / 2;
         this.y = (this.height - this.backgroundHeight) / 2;
 
+        // padding
         int pad = 12;
         int bw = backgroundWidth - pad * 2;
 
         int rowY = y + 34;
 
-        this.addRenderableWidget(new ClientButton(
-                x + pad, rowY, bw, 22,
-                Component.literal("feature 1"),
-                this::onFeature1Click
-        ));
+        List<Hack> hacks = hm.getAllHacks();
+        int hackSize = hacks.size();
+        // rather lets iterate through the thing
+        for(int i = 0; i < hackSize; i++) {
+            this.addRenderableWidget(new ClientButton(
+                    x + pad, rowY + (i * yDelta), bw, 22, // yDelta * some i
+                    Component.literal(hacks.get(i).getName()),
+                    hacks.get(i)
+            ));
+        }
 
+        // fine to stay this will end everything
         this.addRenderableWidget(new ClientButton(
-                x + pad, rowY + 28, bw, 22,
-                Component.literal("feature 2"),
-                this::onFeature2Click
+                x + pad, y + (yDelta*hackSize), 72, 22,
+                CommonComponents.GUI_DONE,
+                this::onClose
         ));
 
         this.textField = new EditBox(this.font, x + pad, y + 98, bw, 20, Component.empty());
@@ -51,12 +66,6 @@ public class Menu extends Screen {
         this.textField.setHint(Component.literal("enter text..."));
         this.addRenderableWidget(this.textField);
         this.setInitialFocus(this.textField);
-
-        this.addRenderableWidget(new ClientButton(
-                x + pad, y + 128, 72, 22,
-                CommonComponents.GUI_DONE,
-                this::onClose
-        ));
     }
 
     @Override
@@ -91,16 +100,6 @@ public class Menu extends Screen {
         super.render(gfx, mouseX, mouseY, delta);
     }
 
-    @Override
-    public boolean isPauseScreen() {
-        return false;
-    }
-
-    @Override
-    public void onClose() {
-        Minecraft.getInstance().setScreen(this.parent);
-    }
-
     private void onFeature1Click() {
         System.out.println("feature 1 activated");
     }
@@ -116,5 +115,15 @@ public class Menu extends Screen {
             int col = (a << 24);
             gfx.fill(x - i, y - i, x + w + i, y + h + i, col);
         }
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
+    public void onClose() {
+        Minecraft.getInstance().setScreen(this.parent);
     }
 }
