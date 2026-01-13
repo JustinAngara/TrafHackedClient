@@ -85,6 +85,8 @@ public class TrafModClient implements ClientModInitializer {
 
 			lastHealth = currentHealth;
 		});
+
+
 	}
 
 	public static void openMenu(){

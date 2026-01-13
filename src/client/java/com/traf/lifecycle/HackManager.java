@@ -3,6 +3,8 @@ package com.traf.lifecycle;
 import com.traf.hacks.*;
 import com.traf.lifecycle.display.Display;
 import com.traf.hacks.sub.SubHack;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 
 import java.util.ArrayList;
@@ -17,6 +19,20 @@ public class HackManager {
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoHeal("AutoHeal"));
+        espSetup();
+    }
+
+    private void espSetup(){
+        ESP espHack = new ESP("ESP", true);
+        hacks.add(espHack);
+
+        WorldRenderEvents.AFTER_ENTITIES.register((context) -> {
+            espHack.render(
+                    context.matrices(),
+                    Minecraft.getInstance().renderBuffers().bufferSource()
+            );
+        });
+
     }
 
     public <T extends Hack> T getHack(Class<T> hackClass) {
@@ -48,5 +64,7 @@ public class HackManager {
         }
 
     }
+
+
     public List<Hack> getAllHacks(){ return hacks; }
 }

@@ -11,6 +11,11 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
+/*
+* TODO: Fix these magic numbers - will fix soon im just lazy asf rn
+* */
+
+
 public class Menu extends Screen {
     private final Screen parent;
     private HackManager hm;
