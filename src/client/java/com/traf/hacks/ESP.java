@@ -77,8 +77,7 @@ public class ESP extends Hack {
             } else if(entity instanceof LivingEntity) {
                 renderEntityBox(poseStack, bufferSource, entity, camPos, mobColor);
             }
-
-            ////////////     end     //////////////////
+            ////////////dont add code beyond here////////
         }
 
         // flush the buffer to actually draw
