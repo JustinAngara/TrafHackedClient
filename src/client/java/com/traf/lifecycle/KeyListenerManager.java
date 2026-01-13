@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.HashMap;
 import java.util.Map;
 
-
+// getMenu()
 public class KeyListenerManager {
     private static KeyMapping swingKey;
     private static Map<KeyMapping, Hack> km;
@@ -23,21 +23,37 @@ public class KeyListenerManager {
         createKeyBind(this.hm.getHack(Flight.class), "flight", GLFW.GLFW_KEY_F);
         createKeyBind(this.hm.getHack(Speed.class), "speed", GLFW.GLFW_KEY_V);
         createKeyBind(this.hm.getHack(AutoHeal.class), "autoheal", GLFW.GLFW_KEY_KP_0);
+        createKeyBind(null, "menu", GLFW.GLFW_KEY_RIGHT_SHIFT);
+
     }
 
     public void start(){
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            for(Map.Entry<KeyMapping, Hack> e : km.entrySet()){
-                if(e.getKey().consumeClick()){
+            for(var e : km.entrySet()){
+                if(!e.getKey().consumeClick()) continue;
+
+                Object temp = e.getValue();
+
+                // for menu specefically
+                if(e.getValue()==null){
+                    TrafModClient.openMenu();
+                    continue;
+                }
+
+
+                try{
                     // reverse teh switch
-                    Hack temp = e.getValue();
-                    if(temp!=null){
-                        temp.setOn(!temp.isOn());
-                        System.out.println("this is the value: "+temp.getClass()+" "+temp.isOn());
-                    }
+                    Hack x = (Hack) temp;
+                    x.setOn(!x.isOn());
+                    System.out.println("this is the value: "+temp.getClass()+" "+x.isOn());
+                } catch (IllegalArgumentException exc){
+                    System.out.println("should only include objects" + exc);
                 }
             }
+
+
+
 
         });
     }

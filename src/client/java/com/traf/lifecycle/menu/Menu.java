@@ -32,6 +32,8 @@ public class Menu extends Screen {
     // these are where components go to
     @Override
     protected void init() {
+        System.out.println("i am init");
+
         this.x = (this.width - this.backgroundWidth) / 2;
         this.y = (this.height - this.backgroundHeight) / 2;
 
@@ -40,6 +42,14 @@ public class Menu extends Screen {
         int bw = backgroundWidth - pad * 2;
 
         int rowY = y + 34;
+
+        this.textField = new EditBox(this.font, x + pad, y + 98, bw, 20, Component.empty());
+        this.textField.setMaxLength(50);
+        this.textField.setBordered(false);
+        this.textField.setTextColor(0xEDEDED);
+        this.textField.setHint(Component.literal("enter text..."));
+        this.addRenderableWidget(this.textField);
+        this.setInitialFocus(this.textField);
 
         List<Hack> hacks = hm.getAllHacks();
         int hackSize = hacks.size();
@@ -58,18 +68,13 @@ public class Menu extends Screen {
                 CommonComponents.GUI_DONE,
                 this::onClose
         ));
-
-        this.textField = new EditBox(this.font, x + pad, y + 98, bw, 20, Component.empty());
-        this.textField.setMaxLength(50);
-        this.textField.setBordered(false);
-        this.textField.setTextColor(0xEDEDED);
-        this.textField.setHint(Component.literal("enter text..."));
-        this.addRenderableWidget(this.textField);
-        this.setInitialFocus(this.textField);
     }
 
     @Override
     public void render(GuiGraphics gfx, int mouseX, int mouseY, float delta) {
+
+        System.out.println("i am render");
+
         // dim world
         gfx.fill(0, 0, this.width, this.height, 0xA0000000);
 
@@ -98,15 +103,6 @@ public class Menu extends Screen {
         gfx.renderOutline(tfX1, tfY1, bw, 20, 0x22000000);
 
         super.render(gfx, mouseX, mouseY, delta);
-    }
-
-    private void onFeature1Click() {
-        System.out.println("feature 1 activated");
-    }
-
-    private void onFeature2Click() {
-        System.out.println("feature 2 activated");
-        System.out.println("text: " + this.textField.getValue());
     }
 
     private static void drawShadow(GuiGraphics gfx, int x, int y, int w, int h, int radius) {

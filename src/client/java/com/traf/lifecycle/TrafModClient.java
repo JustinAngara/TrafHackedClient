@@ -15,6 +15,7 @@ import net.minecraft.resources.Identifier;
 public class TrafModClient implements ClientModInitializer {
 
 	// this will be the lifetime of the world, not the indivdual hack runnign by itself
+	private static Menu menu;
 	private static long gameTicks=0;
 	private static HackManager hm;
 	private static Minecraft mc;
@@ -34,9 +35,8 @@ public class TrafModClient implements ClientModInitializer {
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			TrafMod.LOGGER.info("Joined a world session");
+			if(mc == null) menu = new Menu(mc.screen, hm);
 
-			// this is where the mneu is
-			mc.setScreen(new Menu(mc.screen, hm));
 
 		});
 		// add disply stuff
@@ -87,5 +87,10 @@ public class TrafModClient implements ClientModInitializer {
 		});
 	}
 
+	public static void openMenu(){
+		mc.execute(() -> mc.setScreen(new Menu(mc.screen, hm)));
+	}
 	public static Minecraft getMinecraft(){ return mc; }
+	public static Menu getMenu(){ return menu; }
+
 }

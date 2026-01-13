@@ -32,6 +32,7 @@ public class Display {
 
     // this method gets repeatedly called
     public void run(GuiGraphics guiGraphics){
+
         // keep a reference to the guigraphics within each frame
         this.guiGraphics = guiGraphics;
 
