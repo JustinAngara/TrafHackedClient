@@ -19,11 +19,12 @@ public class HackManager {
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoHeal("AutoHeal"));
-        espSetup();
+        hacks.add(setupESP()); // this needs to render aognside of hacks
     }
 
-    private void espSetup(){
-        ESP espHack = new ESP("ESP", true);
+    private ESP setupESP(){
+        ESP espHack = new ESP("ESP");
+
         hacks.add(espHack);
 
         WorldRenderEvents.AFTER_ENTITIES.register((context) -> {
@@ -32,21 +33,11 @@ public class HackManager {
                     Minecraft.getInstance().renderBuffers().bufferSource()
             );
         });
+        return espHack;
 
     }
 
-    public <T extends Hack> T getHack(Class<T> hackClass) {
-        for (Hack hack : hacks) {
-            if (hackClass.isInstance(hack)) {
-                return hackClass.cast(hack);
-            }
-        }
-        return null;
-    }
 
-    /*
-    * This will loop through every hack that is queued up in this arraylist
-    * */
     public void run(LocalPlayer lp){
 
         player = lp;
@@ -63,6 +54,18 @@ public class HackManager {
             }
         }
 
+    }
+
+    /*
+     * This will loop through every hack that is queued up in this arraylist
+     * */
+    public <T extends Hack> T getHack(Class<T> hackClass) {
+        for (Hack hack : hacks) {
+            if (hackClass.isInstance(hack)) {
+                return hackClass.cast(hack);
+            }
+        }
+        return null;
     }
 
 

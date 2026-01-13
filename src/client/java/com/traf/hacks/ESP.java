@@ -20,11 +20,15 @@ public class ESP extends Hack {
     private boolean includeMobs;
     private final Minecraft mc;
     private float width;
+
     public ESP(String s, boolean includeMobs) {
         super(s);
         this.includeMobs = includeMobs;
         this.mc = Minecraft.getInstance();
         this.width = 3.f;
+    }
+    public ESP(String s) {
+        this(s, true); // default val true
     }
 
     @Override
@@ -33,9 +37,6 @@ public class ESP extends Hack {
         return true;
     }
 
-    /**
-     * Call this from your render event handler
-     */
     public void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
         if(!this.isOn() || mc.level == null) return;
 
