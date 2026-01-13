@@ -15,12 +15,12 @@ public class AutoAim extends Hack {
 
     public AutoAim(String s) {
         super(s);
-        this.setOn(false);
+
 
     }
     @Override
     public boolean run(LocalPlayer lp) {
-        if(isOn()==false) return false;
+        if(!isOn()) return false;
         
         vlh.run(lp);
         hh.run(lp);

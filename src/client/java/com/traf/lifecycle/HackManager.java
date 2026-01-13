@@ -13,9 +13,9 @@ public class HackManager {
     private List<Hack> hacks = new ArrayList<>();
 
     public HackManager(){
+        hacks.add(new AutoAim("Auto Aim"));
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
-        hacks.add(new AutoAim("Auto Aim"));
         hacks.add(new AutoHeal("AutoHeal"));
     }
 

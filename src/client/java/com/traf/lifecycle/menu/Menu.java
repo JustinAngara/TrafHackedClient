@@ -32,18 +32,33 @@ public class Menu extends Screen {
     // these are where components go to
     @Override
     protected void init() {
-        System.out.println("i am init");
+        super.init();
 
         this.x = (this.width - this.backgroundWidth) / 2;
         this.y = (this.height - this.backgroundHeight) / 2;
 
-        // padding
         int pad = 12;
         int bw = backgroundWidth - pad * 2;
 
         int rowY = y + 34;
+        int btnH = 22;
 
-        this.textField = new EditBox(this.font, x + pad, y + 98, bw, 20, Component.empty());
+        // hack buttons
+        List<Hack> hacks = hm.getAllHacks();
+        for (int i = 0; i < hacks.size(); i++) {
+            this.addRenderableWidget(new ClientButton(
+                    x + pad,
+                    rowY + (i * yDelta),
+                    bw,
+                    btnH,
+                    Component.literal(hacks.get(i).getName()),
+                    hacks.get(i)
+            ));
+        }
+
+        // text field goes UNDER the buttons so it can't overlap
+        int tfY = rowY + (hacks.size() * yDelta) + 8;
+        this.textField = new EditBox(this.font, x + pad, tfY, bw, 20, Component.empty());
         this.textField.setMaxLength(50);
         this.textField.setBordered(false);
         this.textField.setTextColor(0xEDEDED);
@@ -51,20 +66,13 @@ public class Menu extends Screen {
         this.addRenderableWidget(this.textField);
         this.setInitialFocus(this.textField);
 
-        List<Hack> hacks = hm.getAllHacks();
-        int hackSize = hacks.size();
-        // rather lets iterate through the thing
-        for(int i = 0; i < hackSize; i++) {
-            this.addRenderableWidget(new ClientButton(
-                    x + pad, rowY + (i * yDelta), bw, 22, // yDelta * some i
-                    Component.literal(hacks.get(i).getName()),
-                    hacks.get(i)
-            ));
-        }
-
-        // fine to stay this will end everything
+        // done button under text field
+        int doneY = tfY + 20 + 10;
         this.addRenderableWidget(new ClientButton(
-                x + pad, y + (yDelta*hackSize), 72, 22,
+                x + pad,
+                doneY,
+                72,
+                btnH,
                 CommonComponents.GUI_DONE,
                 this::onClose
         ));
@@ -73,7 +81,6 @@ public class Menu extends Screen {
     @Override
     public void render(GuiGraphics gfx, int mouseX, int mouseY, float delta) {
 
-        System.out.println("i am render");
 
         // dim world
         gfx.fill(0, 0, this.width, this.height, 0xA0000000);
@@ -101,6 +108,13 @@ public class Menu extends Screen {
 
         gfx.fill(tfX1, tfY1, tfX2, tfY2, 0xFF111113);
         gfx.renderOutline(tfX1, tfY1, bw, 20, 0x22000000);
+
+
+        // debug
+        int rowY = 28;
+        gfx.renderOutline(x + pad, rowY + 2*yDelta, bw, 22, 0xFFFF0000); // 3rd button
+        gfx.renderOutline(x + pad, y + 98, bw, 20, 0xFF00FF00);          // editbox
+
 
         super.render(gfx, mouseX, mouseY, delta);
     }
