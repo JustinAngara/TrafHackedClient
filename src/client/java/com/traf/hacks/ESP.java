@@ -16,16 +16,28 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
+import java.awt.*;
+
 public class ESP extends Hack {
     private boolean includeMobs;
     private final Minecraft mc;
     private float width;
+    private Color playerColor;
+    private Color mobColor;
+    private Color monsterColor;
+
 
     public ESP(String s, boolean includeMobs) {
         super(s);
         this.includeMobs = includeMobs;
         this.mc = Minecraft.getInstance();
         this.width = 3.f;
+
+        // setup colors
+        playerColor = new Color(255,0,0,255);    // player ofc
+        monsterColor = new Color(255,0,255,255); // hostile
+        mobColor = new Color(255,255,255,255);   // passive
+
     }
     public ESP(String s) {
         this(s, true); // default val true
@@ -55,12 +67,18 @@ public class ESP extends Hack {
 
             // filter entities based on settings
             if(entity instanceof Player) {
-                renderEntityBox(poseStack, bufferSource, entity, camPos, 0f, 1f, 0f, 1f);
-            } else if(includeMobs && entity instanceof Monster) {
-                renderEntityBox(poseStack, bufferSource, entity, camPos, 1f, 0f, 0f, 1f);
-            } else if(includeMobs && entity instanceof LivingEntity) {
-                renderEntityBox(poseStack, bufferSource, entity, camPos, 1f, 1f, 0f, 1f);
+                renderEntityBox(poseStack, bufferSource, entity, camPos, playerColor);
             }
+
+            //////////// handle mobs //////////////////
+            if(!includeMobs) continue;
+            if(entity instanceof Monster) {
+                renderEntityBox(poseStack, bufferSource, entity, camPos, monsterColor);
+            } else if(entity instanceof LivingEntity) {
+                renderEntityBox(poseStack, bufferSource, entity, camPos, mobColor);
+            }
+
+            ////////////     end     //////////////////
         }
 
         // flush the buffer to actually draw
@@ -72,41 +90,55 @@ public class ESP extends Hack {
 
     private void renderEntityBox(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
                                  Entity entity, Vec3 camPos,
-                                 float r, float g, float b, float a) {
-        AABB box = entity.getBoundingBox();
+                                 Color c) {
 
-        double minX = box.minX - camPos.x;
-        double minY = box.minY - camPos.y;
-        double minZ = box.minZ - camPos.z;
-        double maxX = box.maxX - camPos.x;
-        double maxY = box.maxY - camPos.y;
-        double maxZ = box.maxZ - camPos.z;
+        AABB box = entity.getBoundingBox().move(-camPos.x, -camPos.y, -camPos.z);
+
+        double minX = box.minX, minY = box.minY, minZ = box.minZ;
+        double maxX = box.maxX, maxY = box.maxY, maxZ = box.maxZ;
+
+        float r = (float) c.getRed()   / 255.f;
+        float g = (float) c.getGreen() / 255.f;
+        float b = (float) c.getBlue()  / 255.f;
+        float a = (float) c.getAlpha() / 255.f;
+
 
         poseStack.pushPose();
+        try {
+            VertexConsumer buffer = bufferSource.getBuffer(RenderTypes.LINES);
+            Matrix4f matrix = poseStack.last().pose();
 
-        VertexConsumer buffer = bufferSource.getBuffer(RenderTypes.LINES);
-        Matrix4f matrix = poseStack.last().pose();
+            // 8 corners of the box
+            double[][] p = {
+                    {minX, minY, minZ}, // 0
+                    {maxX, minY, minZ}, // 1
+                    {maxX, minY, maxZ}, // 2
+                    {minX, minY, maxZ}, // 3
+                    {minX, maxY, minZ}, // 4
+                    {maxX, maxY, minZ}, // 5
+                    {maxX, maxY, maxZ}, // 6
+                    {minX, maxY, maxZ}, // 7
+            };
 
+            // 12 edges (pairs of corner indices)
+            int[][] e = {
+                    {0,1},{1,2},{2,3},{3,0}, // bottom
+                    {4,5},{5,6},{6,7},{7,4}, // top
+                    {0,4},{1,5},{2,6},{3,7}  // verticals
+            };
 
-        // bottom face
-        drawLine(buffer, matrix, minX, minY, minZ, maxX, minY, minZ, r, g, b, a);
-        drawLine(buffer, matrix, maxX, minY, minZ, maxX, minY, maxZ, r, g, b, a);
-        drawLine(buffer, matrix, maxX, minY, maxZ, minX, minY, maxZ, r, g, b, a);
-        drawLine(buffer, matrix, minX, minY, maxZ, minX, minY, minZ, r, g, b, a);
+            for (int[] edge : e) {
+                double[] a0 = p[edge[0]];
+                double[] a1 = p[edge[1]];
+                drawLine(buffer, matrix,
+                        a0[0], a0[1], a0[2],
+                        a1[0], a1[1], a1[2],
+                        r, g, b, a);
+            }
+        } finally {
+            poseStack.popPose();
+        }
 
-        // top face
-        drawLine(buffer, matrix, minX, maxY, minZ, maxX, maxY, minZ, r, g, b, a);
-        drawLine(buffer, matrix, maxX, maxY, minZ, maxX, maxY, maxZ, r, g, b, a);
-        drawLine(buffer, matrix, maxX, maxY, maxZ, minX, maxY, maxZ, r, g, b, a);
-        drawLine(buffer, matrix, minX, maxY, maxZ, minX, maxY, minZ, r, g, b, a);
-
-        // vertical edges
-        drawLine(buffer, matrix, minX, minY, minZ, minX, maxY, minZ, r, g, b, a);
-        drawLine(buffer, matrix, maxX, minY, minZ, maxX, maxY, minZ, r, g, b, a);
-        drawLine(buffer, matrix, maxX, minY, maxZ, maxX, maxY, maxZ, r, g, b, a);
-        drawLine(buffer, matrix, minX, minY, maxZ, minX, maxY, maxZ, r, g, b, a);
-
-        poseStack.popPose();
     }
 
     private void drawLine(VertexConsumer buffer, Matrix4f matrix,
@@ -132,3 +164,4 @@ public class ESP extends Hack {
         return includeMobs;
     }
 }
+

@@ -19,22 +19,18 @@ public class HackManager {
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoHeal("AutoHeal"));
-        hacks.add(setupESP()); // this needs to render aognside of hacks
+        setupESP(new ESP("ESP")); // this needs to render aognside of hacks
     }
 
-    private ESP setupESP(){
-        ESP espHack = new ESP("ESP");
-
-        hacks.add(espHack);
-
+    private ESP setupESP(ESP esp){
+        hacks.add(esp);
         WorldRenderEvents.AFTER_ENTITIES.register((context) -> {
-            espHack.render(
+            esp.render(
                     context.matrices(),
                     Minecraft.getInstance().renderBuffers().bufferSource()
             );
         });
-        return espHack;
-
+        return esp;
     }
 
 
@@ -43,7 +39,7 @@ public class HackManager {
         player = lp;
         // next run all the hacks
         for(Hack e : hacks){
-            if(e instanceof SubHack) continue; // we don't run sub hacks (aka helpers)
+            if(e instanceof SubHack) continue; // we don't run sub h acks (aka helpers)
             e.run(player);
 
             // update title
@@ -57,7 +53,7 @@ public class HackManager {
     }
 
     /*
-     * This will loop through every hack that is queued up in this arraylist
+     * this will loop through every hack that is queued up in this arraylist
      * */
     public <T extends Hack> T getHack(Class<T> hackClass) {
         for (Hack hack : hacks) {
