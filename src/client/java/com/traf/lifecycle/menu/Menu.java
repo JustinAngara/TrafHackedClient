@@ -16,8 +16,8 @@ public class Menu extends Screen {
     private HackManager hm;
     private EditBox textField;
 
-    private final int backgroundWidth = 190;
-    private final int backgroundHeight = 170;
+    private final int backgroundWidth = 210;
+    private final int backgroundHeight = 200;
 
     private int x, y, yDelta = 28;
 
@@ -29,22 +29,35 @@ public class Menu extends Screen {
         this.hm = hm;
     }
 
+    private void setup(int pad, int tfy, int bw){
+        this.textField = new EditBox(this.font, x + pad, tfy, bw, 20, Component.empty());
+        this.textField.setMaxLength(50);
+        this.textField.setBordered(false);
+        this.textField.setTextColor(0xEDEDED);
+        this.textField.setHint(Component.literal("enter text..."));
+        this.addRenderableWidget(this.textField);
+        this.setInitialFocus(this.textField);
+    }
+
     // these are where components go to
     @Override
     protected void init() {
         super.init();
+        List<Hack> hacks = hm.getAllHacks();
 
         this.x = (this.width - this.backgroundWidth) / 2;
         this.y = (this.height - this.backgroundHeight) / 2;
 
+        // anoying setup
         int pad = 12;
         int bw = backgroundWidth - pad * 2;
-
         int rowY = y + 34;
         int btnH = 22;
+        int tfY = rowY + (hacks.size() * yDelta) + 8; // text field goes UNDER the buttons so it can't overlap
+        this.setup(pad, tfY, bw);
+
 
         // hack buttons
-        List<Hack> hacks = hm.getAllHacks();
         for (int i = 0; i < hacks.size(); i++) {
             this.addRenderableWidget(new ClientButton(
                     x + pad,
@@ -56,26 +69,6 @@ public class Menu extends Screen {
             ));
         }
 
-        // text field goes UNDER the buttons so it can't overlap
-        int tfY = rowY + (hacks.size() * yDelta) + 8;
-        this.textField = new EditBox(this.font, x + pad, tfY, bw, 20, Component.empty());
-        this.textField.setMaxLength(50);
-        this.textField.setBordered(false);
-        this.textField.setTextColor(0xEDEDED);
-        this.textField.setHint(Component.literal("enter text..."));
-        this.addRenderableWidget(this.textField);
-        this.setInitialFocus(this.textField);
-
-        // done button under text field
-        int doneY = tfY + 20 + 10;
-        this.addRenderableWidget(new ClientButton(
-                x + pad,
-                doneY,
-                72,
-                btnH,
-                CommonComponents.GUI_DONE,
-                this::onClose
-        ));
     }
 
     @Override
@@ -109,11 +102,6 @@ public class Menu extends Screen {
         gfx.fill(tfX1, tfY1, tfX2, tfY2, 0xFF111113);
         gfx.renderOutline(tfX1, tfY1, bw, 20, 0x22000000);
 
-
-        // debug
-        int rowY = 28;
-        gfx.renderOutline(x + pad, rowY + 2*yDelta, bw, 22, 0xFFFF0000); // 3rd button
-        gfx.renderOutline(x + pad, y + 98, bw, 20, 0xFF00FF00);          // editbox
 
 
         super.render(gfx, mouseX, mouseY, delta);
