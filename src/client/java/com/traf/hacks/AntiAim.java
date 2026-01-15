@@ -11,7 +11,7 @@ public class AntiAim extends Hack {
     private float realPitch = 0.0f;
 
     private AntiAimMode mode = AntiAimMode.SPIN;
-    private int tickCounter = 0;
+
 
     public enum AntiAimMode {
         SPIN,
@@ -29,7 +29,7 @@ public class AntiAim extends Hack {
     public boolean run(LocalPlayer lp) {
         if (lp == null) return false;
 
-        tickCounter++;
+        incrementTick();
         realYaw = lp.getYRot();
         realPitch = lp.getXRot();
 
@@ -87,14 +87,14 @@ public class AntiAim extends Hack {
     }
 
     private float[] jitterMode() {
-        float jitterYaw = (tickCounter % 2 == 0) ? realYaw + 90.0f : realYaw - 90.0f;
-        float jitterPitch = (tickCounter % 4 < 2) ? 89.0f : -89.0f;
+        float jitterYaw = (getCurrentTick() % 2 == 0) ? realYaw + 90.0f : realYaw - 90.0f;
+        float jitterPitch = (getCurrentTick() % 4 < 2) ? 89.0f : -89.0f;
 
         return new float[]{jitterYaw, jitterPitch};
     }
 
     private float[] randomMode() {
-        if (tickCounter % 3 == 0) {
+        if (getCurrentTick() % 3 == 0) {
             currentSpinYaw = (float) (Math.random() * 360.0f);
         }
         float randomPitch = (float) (Math.random() * 180.0f - 90.0f);
