@@ -15,11 +15,12 @@ public class HackManager {
     private List<Hack> hacks = new ArrayList<>();
 
     public HackManager(){
-        hacks.add(new AutoAim("Auto Aim"));
+        setupESP(new ESP("ESP")); // this needs to render aognside of hacks
+        hacks.add(new AntiAim("Anti Aim"));
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoHeal("AutoHeal"));
-        setupESP(new ESP("ESP")); // this needs to render aognside of hacks
+        hacks.add(new AutoAim("Auto Aim"));
     }
 
     private ESP setupESP(ESP esp){
