@@ -18,11 +18,24 @@ public class AntiAim extends Hack {
         JITTER,
         RANDOM,
         DOWN,
-        BACKWARD
+        BACKWARD;
+
+        public static AntiAimMode fromSlot(int slot) {
+            AntiAimMode[] values = values(); // grab current enums
+            if (slot < 0 || slot >= values.length) {
+                return SPIN;
+            }
+            return values[slot];
+        }
     }
 
-    public AntiAim(String s) {
+    // next change up antiaimmode to slot index
+    public AntiAim(String s, int slot) {
         super(s);
+        this.mode = AntiAimMode.fromSlot(slot);
+    }
+    public AntiAim(String s) {
+        this(s, 0);
     }
 
     @Override
