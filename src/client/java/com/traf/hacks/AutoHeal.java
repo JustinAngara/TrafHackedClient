@@ -108,13 +108,15 @@ public class AutoHeal extends Hack {
     private void runHeal(List<ItemSlot> stacks) {
         // pick the closest one to the hotbar
         // if it is between values 1-9 => indecies 0-8, that means we are able to directly press [1,9] and press left click
-
+        int size = stacks.size();
         for(var e : stacks){
             if(e.slot >= 0 && e.slot <= 8) {
                 // todo logic
                 // make it so that you would set yaw down and perform pot
+                e.throwHeal();
             } else {
                 // perform sort to the indecies
+
             }
         }
 
@@ -126,6 +128,10 @@ public class AutoHeal extends Hack {
         }
     }
 
+    public void yaw(){
+
+    }
+
     private static class ItemSlot {
 
         private int slot;      // where its located
@@ -135,6 +141,15 @@ public class AutoHeal extends Hack {
             this.slot = slot;
             this.type = type;
         }
+
+        public void throwHeal(){
+            if(slot <= 8 && slot >=0){
+                // go straight to slot and throw
+
+            }
+        }
+
+
 
         ItemSlot getItemSlot(){ return this; }
 
