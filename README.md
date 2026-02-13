@@ -7,3 +7,7 @@
 
 ![menu preview](images/1.png)
 ![menu preview](images/2.png)
+
+## License
+
+- This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
