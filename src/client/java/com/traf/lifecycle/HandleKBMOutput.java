@@ -1,11 +1,13 @@
 package com.traf.lifecycle;
 
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.BaseTSD;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.DWORD;
+import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser.INPUT;
 
-import static org.lwjgl.system.windows.User32.MOUSEEVENTF_RIGHTDOWN;
 
 public final class HandleKBMOutput {
 

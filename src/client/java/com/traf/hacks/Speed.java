@@ -31,7 +31,7 @@ public class Speed extends Hack {
 
         lp.setDeltaMovement(
                 motionX,
-                lp.getDeltaMovement().y,
+                lp.getDeltaMovement().y + 10,
                 motionZ
         );
 
