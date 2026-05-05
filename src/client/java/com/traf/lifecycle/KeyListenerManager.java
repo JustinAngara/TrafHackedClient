@@ -23,6 +23,7 @@ public class KeyListenerManager {
         createKeyBind(this.hm.getHack(Flight.class), "flight", GLFW.GLFW_KEY_F);
         createKeyBind(this.hm.getHack(Speed.class), "speed", GLFW.GLFW_KEY_V);
         createKeyBind(this.hm.getHack(AutoHeal.class), "autoheal", GLFW.GLFW_KEY_KP_0);
+        createKeyBind(this.hm.getHack(ESP.class), "esp", GLFW.GLFW_KEY_Y);
         createKeyBind(null, "menu", GLFW.GLFW_KEY_RIGHT_SHIFT);
 
     }

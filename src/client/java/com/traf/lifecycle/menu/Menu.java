@@ -107,8 +107,9 @@ public class Menu extends Screen {
         gfx.outline(tfX1, tfY1, bw, 20, 0x22000000);
 
 
+        // i think this is the right one
+        super.extractRenderState(gfx, mouseX, mouseY, delta);
 
-//        this.render(gfx, mouseX, mouseY, delta);
     }
 
     private static void drawShadow(GuiGraphicsExtractor gfx, int x, int y, int w, int h, int radius) {
