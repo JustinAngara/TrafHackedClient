@@ -26,7 +26,7 @@ public class HackManager {
 
     private ESP setupESP(ESP esp) {
         hacks.add(esp);
-        LevelRenderEvents.AFTER_ENTITIES.register((context) -> {
+        LevelRenderEvents.AFTER_SOLID_FEATURES.register((context) -> {
             esp.render(
                     context.poseStack(),
                     Minecraft.getInstance().renderBuffers().bufferSource()

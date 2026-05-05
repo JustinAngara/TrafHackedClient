@@ -2,7 +2,7 @@ package com.traf.lifecycle.display;
 
 import com.traf.lifecycle.TrafModClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Display {
     private final Minecraft mc;
-    private GuiGraphics guiGraphics;
+    private GuiGraphicsExtractor guiGraphics;
     private static List<String> hackTitles;
     private int displayStartX = 10, displayStartY = 10, deltaYChange = 9;
 
@@ -31,7 +31,7 @@ public class Display {
     }
 
     // this method gets repeatedly called
-    public void run(GuiGraphics guiGraphics){
+    public void run(GuiGraphicsExtractor guiGraphics){
 
         // keep a reference to the guigraphics within each frame
         this.guiGraphics = guiGraphics;
@@ -58,7 +58,7 @@ public class Display {
 
     }
     public void addHackTitle(String hack){
-        guiGraphics.drawString(
+        guiGraphics.text(
                 mc.font,
                 hack,
                 displayStartX,
@@ -97,7 +97,7 @@ public class Display {
 
 
     private void displayLifetime(){
-        guiGraphics.drawString(
+        guiGraphics.text(
                 mc.font,
                 "Lifetime: "+ TrafModClient.getGameTicks(),
                 displayStartX,
@@ -112,7 +112,7 @@ public class Display {
         float hp = mc.player.getHealth();
         float max = mc.player.getMaxHealth();
 
-        guiGraphics.drawString(
+        guiGraphics.text(
                 mc.font,
                 "Health: " + hp + " / " + max,
                 displayStartX,

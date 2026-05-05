@@ -3,7 +3,7 @@ package com.traf.lifecycle;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.traf.hacks.*;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
@@ -59,8 +59,8 @@ public class KeyListenerManager {
     }
 
     public KeyMapping getKeyMapping(String feature, int keyCode){
-        return KeyBindingHelper.registerKeyBinding(new KeyMapping(
-                "key.modid."+feature,
+        return KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.modid." + feature,
                 InputConstants.Type.KEYSYM,
                 keyCode,
                 KeyMapping.Category.MISC
