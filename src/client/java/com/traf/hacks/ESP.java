@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.world.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -20,16 +21,19 @@ import java.awt.*;
 
 public class ESP extends Hack {
     private boolean includeMobs;
+    private boolean includeItems;
     private final Minecraft mc;
     private float width;
     private Color playerColor;
     private Color mobColor;
     private Color monsterColor;
+    private Color itemColor;
 
 
-    public ESP(String s, boolean includeMobs) {
+    public ESP(String s, boolean includeMobs, boolean includeItems) {
         super(s);
         this.includeMobs = includeMobs;
+        this.includeItems = includeItems;
         this.mc = Minecraft.getInstance();
         this.width = 3.f;
 
@@ -37,10 +41,16 @@ public class ESP extends Hack {
         playerColor = new Color(255,0,0,255);    // player ofc
         monsterColor = new Color(255,0,255,255); // hostile
         mobColor = new Color(255,255,255,255);   // passive
+        itemColor = new Color(255,255,0,255);    // items (yellow)
 
     }
+
+    public ESP(String s, boolean includeMobs) {
+        this(s, includeMobs, true); // default items true
+    }
+
     public ESP(String s) {
-        this(s, true); // default val true
+        this(s, true, true); // default mobs + items true
     }
 
     @Override
@@ -63,6 +73,15 @@ public class ESP extends Hack {
         // draw the entities
         for(Entity entity : mc.level.entitiesForRendering()) {
             if(entity == player) continue;
+
+            // handle items (non-living entities)
+            if(entity instanceof ItemEntity) {
+                if(includeItems) {
+                    renderEntityBox(poseStack, bufferSource, entity, camPos, itemColor);
+                }
+                continue;
+            }
+
             if(!(entity instanceof LivingEntity)) continue;
 
             // filter entities based on settings
@@ -162,5 +181,12 @@ public class ESP extends Hack {
     public boolean getIncludeMobs() {
         return includeMobs;
     }
-}
 
+    public void setIncludeItems(boolean b) {
+        includeItems = b;
+    }
+
+    public boolean getIncludeItems() {
+        return includeItems;
+    }
+}
