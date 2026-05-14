@@ -1,6 +1,8 @@
 package com.traf.hacks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.traf.lifecycle.data.Colors;
+import com.traf.lifecycle.registry.OreRegistry;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -28,60 +30,14 @@ public class XRay extends ESP {
     // ore -> highlight color
     private final Map<Block, Color> oreColors = new HashMap<>();
 
-    // last scan results: position -> color
+    // position -> color
     private final Map<BlockPos, Color> hits = new HashMap<>();
-
-    // colors
-    final Color diamond  = new Color(0,   255, 255, 255);
-    final Color gold     = new Color(255, 215, 0,   255);
-    final Color iron     = new Color(216, 175, 147, 255);
-    final Color emerald  = new Color(0,   255, 0,   255);
-    final Color redstone = new Color(255, 0,   0,   255);
-    final Color lapis    = new Color(0,   90,  255, 255);
-    final Color coal     = new Color(60,  60,  60,  255);
-    final Color copper   = new Color(220, 140, 70,  255);
-    final Color debris   = new Color(150, 70,  150, 255);
-    final Color quartz   = new Color(245, 230, 220, 255);
-    final Color chest    = new Color(255, 0, 187, 255);
 
 
     public XRay(String s) {
         super(s, false, false); // disable mob/item ESP - XRay only cares about blocks
-        setupOres();
     }
 
-    private void setupOres() {
-
-        oreColors.put(Blocks.DIAMOND_ORE,           diamond);
-        oreColors.put(Blocks.DEEPSLATE_DIAMOND_ORE, diamond);
-
-        oreColors.put(Blocks.GOLD_ORE,              gold);
-        oreColors.put(Blocks.DEEPSLATE_GOLD_ORE,    gold);
-        oreColors.put(Blocks.NETHER_GOLD_ORE,       gold);
-
-        oreColors.put(Blocks.IRON_ORE,              iron);
-        oreColors.put(Blocks.DEEPSLATE_IRON_ORE,    iron);
-
-        oreColors.put(Blocks.EMERALD_ORE,           emerald);
-        oreColors.put(Blocks.DEEPSLATE_EMERALD_ORE, emerald);
-
-        oreColors.put(Blocks.REDSTONE_ORE,          redstone);
-        oreColors.put(Blocks.DEEPSLATE_REDSTONE_ORE,redstone);
-
-        oreColors.put(Blocks.LAPIS_ORE,             lapis);
-        oreColors.put(Blocks.DEEPSLATE_LAPIS_ORE,   lapis);
-
-        oreColors.put(Blocks.COAL_ORE,              coal);
-        oreColors.put(Blocks.DEEPSLATE_COAL_ORE,    coal);
-
-        oreColors.put(Blocks.COPPER_ORE,            copper);
-        oreColors.put(Blocks.DEEPSLATE_COPPER_ORE,  copper);
-
-        oreColors.put(Blocks.ANCIENT_DEBRIS,        debris);
-        oreColors.put(Blocks.NETHER_QUARTZ_ORE,     quartz);
-
-        oreColors.put(Blocks.CHEST,                  chest);
-    }
 
     @Override
     public boolean run(LocalPlayer lp) {
@@ -112,10 +68,8 @@ public class XRay extends ESP {
                 for (int dz = -range; dz <= range; dz++) {
                     cur.set(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
                     BlockState state = mc.level.getBlockState(cur);
-                    Color c = oreColors.get(state.getBlock());
-                    if (c != null) {
-                        hits.put(cur.immutable(), c);
-                    }
+                    Color c = OreRegistry.colorFor(state);
+                    if (c != null) hits.put(cur.immutable(), c);
                 }
             }
         }
@@ -140,8 +94,7 @@ public class XRay extends ESP {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    // ----- configuration -----
-
+    // configurations
     public void addOre(Block block, Color color) {
         oreColors.put(block, color);
     }

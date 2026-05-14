@@ -1,17 +1,16 @@
 package com.traf.hacks;
 
+import com.traf.lifecycle.registry.EntityRegistry;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.world.entity.Entity;
 import org.lwjgl.opengl.GL11;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -19,15 +18,13 @@ import org.joml.Matrix4f;
 
 import java.awt.*;
 
+
 public class ESP extends Hack {
     private boolean includeMobs;
     private boolean includeItems;
     protected final Minecraft mc;
     protected float width;
-    private Color playerColor;
-    private Color mobColor;
-    private Color monsterColor;
-    private Color itemColor;
+
 
 
     public ESP(String s, boolean includeMobs, boolean includeItems) {
@@ -36,12 +33,6 @@ public class ESP extends Hack {
         this.includeItems = includeItems;
         this.mc = Minecraft.getInstance();
         this.width = 3.f;
-
-        // setup colors
-        playerColor = new Color(255,0,0,255);    // player ofc
-        monsterColor = new Color(255,0,255,255); // hostile
-        mobColor = new Color(255,255,255,255);   // passive
-        itemColor = new Color(255,255,0,255);    // items (yellow)
 
     }
 
@@ -74,29 +65,15 @@ public class ESP extends Hack {
         for(Entity entity : mc.level.entitiesForRendering()) {
             if(entity == player) continue;
 
-            // handle items (non-living entities)
-            if(entity instanceof ItemEntity) {
-                if(includeItems) {
-                    renderEntityBox(poseStack, bufferSource, entity, camPos, itemColor);
-                }
-                continue;
-            }
-
-            if(!(entity instanceof LivingEntity)) continue;
+            // lookup color from registry
+            Color c = EntityRegistry.colorFor(entity);
+            if (c == null) continue;
 
             // filter entities based on settings
-            if(entity instanceof Player) {
-                renderEntityBox(poseStack, bufferSource, entity, camPos, playerColor);
-            }
+            if (entity instanceof ItemEntity && !includeItems) continue;
+            if (!(entity instanceof Player) && !(entity instanceof ItemEntity) && !includeMobs) continue;
 
-            //////////// handle mobs //////////////////
-            if(!includeMobs) continue;
-            if(entity instanceof Monster) {
-                renderEntityBox(poseStack, bufferSource, entity, camPos, monsterColor);
-            } else if(entity instanceof LivingEntity) {
-                renderEntityBox(poseStack, bufferSource, entity, camPos, mobColor);
-            }
-            ////////////dont add code beyond here////////
+            renderEntityBox(poseStack, bufferSource, entity, camPos, c);
         }
 
         // flush the buffer to actually draw
@@ -113,7 +90,7 @@ public class ESP extends Hack {
         renderAABB(poseStack, bufferSource, box, c);
     }
 
-    /** Draws a wireframe box around a *camera-relative* AABB. Subclasses can use this directly. */
+    // draws wireframe
     protected void renderAABB(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
                               AABB box, Color c) {
 
