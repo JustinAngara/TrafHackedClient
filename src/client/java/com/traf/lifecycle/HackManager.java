@@ -19,14 +19,18 @@ public class HackManager {
         setupESP(new ESP("ESP"));
         setupESP(new XRay("XRay"));
 
+        hacks.add(new AntiHunger("Anti Hunger"));
         hacks.add(new FullBright("Full Bright"));
+        hacks.add(new NoFall("NoFall"));
+        hacks.add(new Regen("Regen"));
+
+
+        hacks.add(new MobAura("Mob Aura"));
         hacks.add(new AntiAim("Anti Aim"));
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
-        hacks.add(new AutoHeal("AutoHeal"));
+        hacks.add(new AutoHeal("Auto Heal"));
         hacks.add(new AutoAim("Auto Aim"));
-        hacks.add(new Regen("Regen"));
-        hacks.add(new NoFall("NoFall"));
     }
 
     private ESP setupESP(ESP esp) {

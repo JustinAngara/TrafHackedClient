@@ -3,7 +3,9 @@
 	"package": "com.traf.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin"
+		"ExampleClientMixin",
+		"MixinFoodData",
+		"MixinClientPacketListener"
 	],
 	"injectors": {
 		"defaultRequire": 1

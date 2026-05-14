@@ -31,23 +31,26 @@ public class XRay extends ESP {
     // last scan results: position -> color
     private final Map<BlockPos, Color> hits = new HashMap<>();
 
+    // colors
+    final Color diamond  = new Color(0,   255, 255, 255);
+    final Color gold     = new Color(255, 215, 0,   255);
+    final Color iron     = new Color(216, 175, 147, 255);
+    final Color emerald  = new Color(0,   255, 0,   255);
+    final Color redstone = new Color(255, 0,   0,   255);
+    final Color lapis    = new Color(0,   90,  255, 255);
+    final Color coal     = new Color(60,  60,  60,  255);
+    final Color copper   = new Color(220, 140, 70,  255);
+    final Color debris   = new Color(150, 70,  150, 255);
+    final Color quartz   = new Color(245, 230, 220, 255);
+    final Color chest    = new Color(255, 0, 187, 255);
+
+
     public XRay(String s) {
         super(s, false, false); // disable mob/item ESP - XRay only cares about blocks
         setupOres();
     }
 
     private void setupOres() {
-        Color diamond  = new Color(0,   255, 255, 255);
-        Color gold     = new Color(255, 215, 0,   255);
-        Color iron     = new Color(216, 175, 147, 255);
-        Color emerald  = new Color(0,   255, 0,   255);
-        Color redstone = new Color(255, 0,   0,   255);
-        Color lapis    = new Color(0,   90,  255, 255);
-        Color coal     = new Color(60,  60,  60,  255);
-        Color copper   = new Color(220, 140, 70,  255);
-        Color debris   = new Color(150, 70,  150, 255);
-        Color quartz   = new Color(245, 230, 220, 255);
-        Color chest    = new Color(255, 155, 0, 255);
 
         oreColors.put(Blocks.DIAMOND_ORE,           diamond);
         oreColors.put(Blocks.DEEPSLATE_DIAMOND_ORE, diamond);
