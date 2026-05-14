@@ -77,8 +77,6 @@ public class Menu extends Screen {
     }
 
     public void render(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float delta) {
-
-
         // dim world
         gfx.fill(0, 0, this.width, this.height, 0xA0000000);
 

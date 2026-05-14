@@ -22,6 +22,9 @@ public class HackManager {
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoHeal("AutoHeal"));
         hacks.add(new AutoAim("Auto Aim"));
+        hacks.add(new Regen("Regen"));
+        hacks.add(new XRay("XRay"));
+        hacks.add(new NoFall("NoFall"));
     }
 
     private ESP setupESP(ESP esp) {
