@@ -4,118 +4,96 @@ import com.traf.hacks.Hack;
 import com.traf.lifecycle.HackManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-/*
-* TODO: Fix these magic numbers - will fix soon im just lazy asf rn
-* */
-
+import java.util.Map;
 
 public class Menu extends Screen {
     private final Screen parent;
-    private HackManager hm;
-    private EditBox textField;
+    private final HackManager hm;
 
-    private final int backgroundWidth = 210;
-    private final int backgroundHeight = 200;
-
-    private int x, y, yDelta = 28;
-
-
+    // panel grid layout
+    private static final int PANEL_WIDTH = 110;
+    private static final int PANEL_GAP   = 10;
+    private static final int PANEL_X0    = 14;
+    private static final int PANEL_Y0    = 14;
 
     public Menu(Screen parent, HackManager hm) {
-        super(Component.literal("Traf Client Menu"));
+        super(Component.literal("Click GUI"));
         this.parent = parent;
         this.hm = hm;
     }
 
-    private void setup(int pad, int tfy, int bw){
-        this.textField = new EditBox(this.font, x + pad, tfy, bw, 20, Component.empty());
-        this.textField.setMaxLength(50);
-        this.textField.setBordered(false);
-        this.textField.setTextColor(0xEDEDED);
-        this.textField.setHint(Component.literal("enter text..."));
-        this.addRenderableWidget(this.textField);
-        this.setInitialFocus(this.textField);
-    }
-
-    // these are where components go to
     @Override
     protected void init() {
         super.init();
-        List<Hack> hacks = hm.getAllHacks();
+        Map<String, List<Hack>> categorized = categorize(hm.getAllHacks());
 
-        this.x = (this.width - this.backgroundWidth) / 2;
-        this.y = (this.height - this.backgroundHeight) / 2;
+        int x = PANEL_X0;
+        int y = PANEL_Y0;
+        int rowMaxH = 0;
 
-        // anoying setup
-        int pad = 12;
-        int bw = backgroundWidth - pad * 2;
-        int rowY = y + 34;
-        int btnH = 22;
-        int tfY = rowY + (hacks.size() * yDelta) + 8; // text field goes UNDER the buttons so it can't overlap
-        this.setup(pad, tfY, bw);
+        for (Map.Entry<String, List<Hack>> entry : categorized.entrySet()) {
+            CategoryPanel panel = new CategoryPanel(x, y, PANEL_WIDTH, entry.getKey(), entry.getValue());
+            this.addRenderableWidget(panel);
 
+            rowMaxH = Math.max(rowMaxH, panel.getFullHeight());
+            x += PANEL_WIDTH + PANEL_GAP;
 
-        // hack buttons
-        for (int i = 0; i < hacks.size(); i++) {
-            this.addRenderableWidget(new ClientButton(
-                    x + pad,
-                    rowY + (i * yDelta),
-                    bw,
-                    btnH,
-                    Component.literal(hacks.get(i).getName()),
-                    hacks.get(i)
-            ));
+            // wrap to next row if we run off the screen
+            if (x + PANEL_WIDTH > this.width - PANEL_X0) {
+                x = PANEL_X0;
+                y += rowMaxH + PANEL_GAP;
+                rowMaxH = 0;
+            }
         }
-
     }
 
-    public void render(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float delta) {
-        // dim world
+    private Map<String, List<Hack>> categorize(List<Hack> hacks) {
+        Map<String, List<Hack>> result = new LinkedHashMap<>();
+        result.put("Combat",   new ArrayList<>());
+        result.put("Movement", new ArrayList<>());
+        result.put("Render",   new ArrayList<>());
+        result.put("Player",   new ArrayList<>());
+        result.put("World",    new ArrayList<>());
+        result.put("Misc",     new ArrayList<>());
+
+        for (Hack h : hacks) {
+            String n = h.getName().toLowerCase();
+            if (n.contains("aim") || n.contains("aura") || n.contains("kill")) {
+                result.get("Combat").add(h);
+            } else if (n.contains("flight") || n.contains("speed") || n.contains("fall") || n.contains("clip") || n.contains("step")) {
+                result.get("Movement").add(h);
+            } else if (n.contains("esp") || n.contains("xray") || n.contains("bright") || n.contains("tracer")) {
+                result.get("Render").add(h);
+            } else if (n.contains("heal") || n.contains("regen") || n.contains("hunger") || n.contains("food")) {
+                result.get("Player").add(h);
+            } else if (n.contains("chest") || n.contains("scaffold") || n.contains("mine")) {
+                result.get("World").add(h);
+            } else {
+                result.get("Misc").add(h);
+            }
+        }
+
+        // drop empty categories so they don't render as empty headers
+        result.values().removeIf(List::isEmpty);
+        return result;
+    }
+
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float delta) {
+        // dim world behind GUI
         gfx.fill(0, 0, this.width, this.height, 0xA0000000);
 
-        // panel shadow
-        drawShadow(gfx, x, y, backgroundWidth, backgroundHeight, 8);
+        // title bar
+        gfx.text(this.font, this.title, PANEL_X0, 4, 0xFFEDEDED, false);
 
-        // panel background
-        gfx.fill(x, y, x + backgroundWidth, y + backgroundHeight, 0xE0141416);
-        gfx.fill(x, y, x + backgroundWidth, y + 18, 0x401F1F23);
-        gfx.outline(x, y, backgroundWidth, backgroundHeight, 0x44FFFFFF);
-
-        // title + label
-        gfx.text(this.font, this.title, x + 12, y + 10, 0xEDEDED, false);
-        gfx.text(this.font, Component.literal("custom features"), x + 12, y + 22, 0xA7A7A7, false);
-
-        // editbox background (since we removed bordered)
-        int pad = 12;
-        int bw = backgroundWidth - pad * 2;
-
-        int tfX1 = x + pad;
-        int tfY1 = y + 98;
-        int tfX2 = tfX1 + bw;
-        int tfY2 = tfY1 + 20;
-
-        gfx.fill(tfX1, tfY1, tfX2, tfY2, 0xFF111113);
-        gfx.outline(tfX1, tfY1, bw, 20, 0x22000000);
-
-
-        // i think this is the right one
+        // let the framework draw all the renderable widgets (the CategoryPanels)
         super.extractRenderState(gfx, mouseX, mouseY, delta);
-
-    }
-
-    private static void drawShadow(GuiGraphicsExtractor gfx, int x, int y, int w, int h, int radius) {
-        for (int i = 1; i <= radius; i++) {
-            int a = (int)(70 * (1f - (i / (float)radius)));
-            int col = (a << 24);
-            gfx.fill(x - i, y - i, x + w + i, y + h + i, col);
-        }
     }
 
     @Override
