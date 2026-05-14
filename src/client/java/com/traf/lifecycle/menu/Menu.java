@@ -1,5 +1,7 @@
 package com.traf.lifecycle.menu;
 
+import com.traf.lifecycle.data.Colors;
+import com.traf.lifecycle.data.Dimensions;
 import com.traf.hacks.Hack;
 import com.traf.lifecycle.HackManager;
 import net.minecraft.client.Minecraft;
@@ -16,14 +18,9 @@ public class Menu extends Screen {
     private final Screen parent;
     private final HackManager hm;
 
-    // panel grid layout
-    private static final int PANEL_WIDTH = 110;
-    private static final int PANEL_GAP   = 10;
-    private static final int PANEL_X0    = 14;
-    private static final int PANEL_Y0    = 14;
 
     public Menu(Screen parent, HackManager hm) {
-        super(Component.literal("Click GUI"));
+        super(Component.literal("Traf Client"));
         this.parent = parent;
         this.hm = hm;
     }
@@ -33,21 +30,21 @@ public class Menu extends Screen {
         super.init();
         Map<String, List<Hack>> categorized = categorize(hm.getAllHacks());
 
-        int x = PANEL_X0;
-        int y = PANEL_Y0;
+        int x = Dimensions.PANEL_X0;
+        int y = Dimensions.PANEL_Y0;
         int rowMaxH = 0;
 
         for (Map.Entry<String, List<Hack>> entry : categorized.entrySet()) {
-            CategoryPanel panel = new CategoryPanel(x, y, PANEL_WIDTH, entry.getKey(), entry.getValue());
+            CategoryPanel panel = new CategoryPanel(x, y, Dimensions.PANEL_WIDTH, entry.getKey(), entry.getValue());
             this.addRenderableWidget(panel);
 
             rowMaxH = Math.max(rowMaxH, panel.getFullHeight());
-            x += PANEL_WIDTH + PANEL_GAP;
+            x += Dimensions.PANEL_WIDTH + Dimensions.PANEL_GAP;
 
             // wrap to next row if we run off the screen
-            if (x + PANEL_WIDTH > this.width - PANEL_X0) {
-                x = PANEL_X0;
-                y += rowMaxH + PANEL_GAP;
+            if (x + Dimensions.PANEL_WIDTH > this.width - Dimensions.PANEL_X0) {
+                x = Dimensions.PANEL_X0;
+                y += rowMaxH + Dimensions.PANEL_GAP;
                 rowMaxH = 0;
             }
         }
@@ -86,13 +83,11 @@ public class Menu extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float delta) {
-        // dim world behind GUI
-        gfx.fill(0, 0, this.width, this.height, 0xA0000000);
+        gfx.fill(0, 0, this.width, this.height, Colors.DIM);
 
-        // title bar
-        gfx.text(this.font, this.title, PANEL_X0, 4, 0xFFEDEDED, false);
+        gfx.text(this.font, this.title, Dimensions.PANEL_X0, 4, Colors.TITLE, false);
 
-        // let the framework draw all the renderable widgets (the CategoryPanels)
+        // let the framework draw all the renderable widgets category panels
         super.extractRenderState(gfx, mouseX, mouseY, delta);
     }
 

@@ -1,5 +1,6 @@
 package com.traf.lifecycle.menu;
 
+import com.traf.lifecycle.data.Colors;
 import com.traf.hacks.Hack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -19,14 +20,6 @@ public class CategoryPanel extends AbstractWidget {
     private static final int ENTRY_H  = 14;
     private static final int PAD      = 4;
 
-    private static final int BG        = 0xE6141416;
-    private static final int HEADER_BG = 0xFF1F1F23;
-    private static final int OUTLINE   = 0x44FFFFFF;
-    private static final int TXT       = 0xFFEDEDED;
-    private static final int TXT_DIM   = 0xFFA7A7A7;
-    private static final int ON_DOT    = 0xFF00B2FF;
-    private static final int OFF_DOT   = 0xFF3A3A40;
-    private static final int HOVER_BG  = 0x33FFFFFF;
 
     private final Component titleText;
     private final Component glyphOpen  = Component.literal("-");
@@ -61,15 +54,15 @@ public class CategoryPanel extends AbstractWidget {
 
         Font font = Minecraft.getInstance().font;
 
-        gfx.fill(x, y, x + w, y + h, BG);
-        gfx.outline(x, y, w, h, OUTLINE);
+        gfx.fill(x, y, x + w, y + h, Colors.BG);
+        gfx.outline(x, y, w, h, Colors.OUTLINE);
 
-        gfx.fill(x, y, x + w, y + HEADER_H, HEADER_BG);
-        gfx.text(font, titleText, x + 6, y + 5, TXT, false);
+        gfx.fill(x, y, x + w, y + HEADER_H, Colors.HEADER_BG);
+        gfx.text(font, titleText, x + 6, y + 5, Colors.TXT, false);
 
         Component glyph = expanded ? glyphOpen : glyphClose;
         int glyphW = font.width(glyph);
-        gfx.text(font, glyph, x + w - 6 - glyphW, y + 5, TXT_DIM, false);
+        gfx.text(font, glyph, x + w - 6 - glyphW, y + 5, Colors.TXT_DIM, false);
 
         if (!expanded) return;
         for (int i = 0; i < hacks.size(); i++) {
@@ -77,15 +70,15 @@ public class CategoryPanel extends AbstractWidget {
             int ey = y + HEADER_H + (i * ENTRY_H);
 
             if (mouseX >= x && mouseX < x + w && mouseY >= ey && mouseY < ey + ENTRY_H) {
-                gfx.fill(x, ey, x + w, ey + ENTRY_H, HOVER_BG);
+                gfx.fill(x, ey, x + w, ey + ENTRY_H, Colors.HOVER_BG);
             }
 
-            int dot = hk.isOn() ? ON_DOT : OFF_DOT;
+            int dot = hk.isOn() ? Colors.ON_DOT : Colors.OFF_DOT;
             gfx.fill(x + 6, ey + 5, x + 10, ey + 9, dot);
 
             gfx.text(font, hackNames.get(i),
                     x + 14, ey + 3,
-                    hk.isOn() ? TXT : TXT_DIM, false);
+                    hk.isOn() ? Colors.TXT : Colors.TXT_DIM, false);
         }
     }
 

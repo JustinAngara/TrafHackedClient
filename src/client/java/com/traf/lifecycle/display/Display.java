@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Display {
     private final Minecraft mc;
+    private boolean isRenderHacksOn = true;
     private GuiGraphicsExtractor guiGraphics;
     private static List<String> hackTitles;
     private int displayStartX = 10, displayStartY = 10, deltaYChange = 9;
@@ -38,11 +39,12 @@ public class Display {
 
         // just add the displays you want
         List<Runnable> displays = new ArrayList<>();
-        displays.add(this::displayHealth);
-        displays.add(this::displayLifetime);
 
         // this will make the dynamic y for each label change
-        for(int i = 0; i < displays.size(); i++){
+        for(int i = 0; i < displays.size(); i++) {
+            if(!isRenderHacksOn){
+                break;
+            }
             displays.get(i).run();
             displayStartY += deltaYChange;
         }
@@ -96,29 +98,24 @@ public class Display {
     }
 
 
-    private void displayLifetime(){
-        guiGraphics.text(
-                mc.font,
-                "Lifetime: "+ TrafModClient.getGameTicks(),
-                displayStartX,
-                displayStartY,
-                0xFFFF00FF,
-                true
-        );
-    }
-
-
-    private void displayHealth() {
-        float hp = mc.player.getHealth();
-        float max = mc.player.getMaxHealth();
-
-        guiGraphics.text(
-                mc.font,
-                "Health: " + hp + " / " + max,
-                displayStartX,
-                displayStartY,
-                0xFFFF00FF,
-                true
-        );
-    }
 }
+
+
+
+
+
+
+
+//    internal documentation idk
+//    private void displayLifetime(){
+//        guiGraphics.text(
+//                mc.font,
+//                "Lifetime: "+ TrafModClient.getGameTicks(),
+//                displayStartX,
+//                displayStartY,
+//                0xFFFF00FF,
+//                true
+//        );
+//    }
+
+
