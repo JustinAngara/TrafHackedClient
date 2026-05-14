@@ -21,7 +21,7 @@ public class Speed extends Hack {
             return true;
         }
 
-        double speed = 0.5;
+        double speed = 1.1;
 
         float yaw = (float) Math.toRadians(lp.getYRot());
         double forward = direction[X] * speed;

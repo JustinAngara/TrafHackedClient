@@ -17,13 +17,15 @@ public class HackManager {
 
     public HackManager(){
         setupESP(new ESP("ESP"));
+        setupESP(new XRay("XRay"));
+
+        hacks.add(new FullBright("Full Bright"));
         hacks.add(new AntiAim("Anti Aim"));
         hacks.add(new Flight("Flight"));
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoHeal("AutoHeal"));
         hacks.add(new AutoAim("Auto Aim"));
         hacks.add(new Regen("Regen"));
-        hacks.add(new XRay("XRay"));
         hacks.add(new NoFall("NoFall"));
     }
 

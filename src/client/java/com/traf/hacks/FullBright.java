@@ -1,39 +1,57 @@
 package com.traf.hacks;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.player.LocalPlayer;
+
+import java.lang.reflect.Field;
 
 public class FullBright extends Hack {
     private final Minecraft mc;
     private Double originalGamma;
     private final double brightGamma = 100.0;
 
+    private static Field GAMMA_VALUE_FIELD;
+    static {
+        try {
+            GAMMA_VALUE_FIELD = OptionInstance.class.getDeclaredField("value");
+            GAMMA_VALUE_FIELD.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
     public FullBright(String s) {
         super(s);
         this.mc = Minecraft.getInstance();
+        this.setOn(true);
+    }
+
+    private void forceGamma(double v) {
+        try {
+            GAMMA_VALUE_FIELD.set(mc.options.gamma(), v);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean run(LocalPlayer lp) {
         if (!this.isOn()) {
-            // restore original gamma if we previously overrode it
             if (originalGamma != null) {
-                mc.options.gamma().set(originalGamma);
+                forceGamma(originalGamma);
                 originalGamma = null;
             }
             return false;
         }
 
-        // stash the original on first activation
         if (originalGamma == null) {
             originalGamma = mc.options.gamma().get();
         }
 
-        // force gamma to "bright" if it isn't already
         if (mc.options.gamma().get() != brightGamma) {
-            mc.options.gamma().set(brightGamma);
+            forceGamma(brightGamma);
         }
-
         return true;
     }
 }

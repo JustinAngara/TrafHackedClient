@@ -22,8 +22,8 @@ import java.awt.*;
 public class ESP extends Hack {
     private boolean includeMobs;
     private boolean includeItems;
-    private final Minecraft mc;
-    private float width;
+    protected final Minecraft mc;
+    protected float width;
     private Color playerColor;
     private Color mobColor;
     private Color monsterColor;
@@ -106,11 +106,16 @@ public class ESP extends Hack {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    private void renderEntityBox(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
-                                 Entity entity, Vec3 camPos,
-                                 Color c) {
-
+    protected void renderEntityBox(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+                                   Entity entity, Vec3 camPos,
+                                   Color c) {
         AABB box = entity.getBoundingBox().move(-camPos.x, -camPos.y, -camPos.z);
+        renderAABB(poseStack, bufferSource, box, c);
+    }
+
+    /** Draws a wireframe box around a *camera-relative* AABB. Subclasses can use this directly. */
+    protected void renderAABB(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+                              AABB box, Color c) {
 
         double minX = box.minX, minY = box.minY, minZ = box.minZ;
         double maxX = box.maxX, maxY = box.maxY, maxZ = box.maxZ;
@@ -159,10 +164,10 @@ public class ESP extends Hack {
 
     }
 
-    private void drawLine(VertexConsumer buffer, Matrix4f matrix,
-                          double x1, double y1, double z1,
-                          double x2, double y2, double z2,
-                          float r, float g, float b, float a) {
+    protected void drawLine(VertexConsumer buffer, Matrix4f matrix,
+                            double x1, double y1, double z1,
+                            double x2, double y2, double z2,
+                            float r, float g, float b, float a) {
 
         buffer.addVertex(matrix, (float)x1, (float)y1, (float)z1)
                 .setColor(r, g, b, a)
