@@ -5,7 +5,6 @@ import net.minecraft.client.player.LocalPlayer;
 
 public class Speed extends Hack {
     private double speed = 1.1;
-
     public Speed(String s){
         super(s);
     }
@@ -22,21 +21,21 @@ public class Speed extends Hack {
         if (direction[X] == 0 && direction[Z] == 0) {
             return true;
         }
+
+        double delay  = 0.05;
+        double maxGrowth = 3.0;
+        double time   = this.getCurrentTick();
+        double growth = Math.min(1 + (delay * time), maxGrowth); // include the max
+
         float yaw = (float) Math.toRadians(lp.getYRot());
-        double forward = direction[X] * speed;
-        double strafe = -direction[Z] * speed;
+        double forward = direction[X] * speed * growth;
+        double strafe  = -direction[Z] * speed * growth;
         double motionX = strafe * Math.cos(yaw) - forward * Math.sin(yaw);
         double motionZ = forward * Math.cos(yaw) + strafe * Math.sin(yaw);
 
-
-        double delay = .05;
-        double time  = this.getCurrentTick();
-
-        double delta = speed + ( delay * time );
-
-                lp.setDeltaMovement(
+        lp.setDeltaMovement(
                 motionX,
-                delta,
+                lp.getDeltaMovement().y,
                 motionZ
         );
 
