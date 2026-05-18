@@ -4,6 +4,8 @@ import com.traf.lifecycle.HandleKBMOutput;
 import net.minecraft.client.player.LocalPlayer;
 
 public class Speed extends Hack {
+    private double speed = 1.1;
+
     public Speed(String s){
         super(s);
     }
@@ -20,22 +22,25 @@ public class Speed extends Hack {
         if (direction[X] == 0 && direction[Z] == 0) {
             return true;
         }
-
-        double speed = 1.1;
-
         float yaw = (float) Math.toRadians(lp.getYRot());
         double forward = direction[X] * speed;
         double strafe = -direction[Z] * speed;
         double motionX = strafe * Math.cos(yaw) - forward * Math.sin(yaw);
         double motionZ = forward * Math.cos(yaw) + strafe * Math.sin(yaw);
 
-        lp.setDeltaMovement(
+
+        double delay = .05;
+        double time  = this.getCurrentTick();
+
+        double delta = speed + ( delay * time );
+
+                lp.setDeltaMovement(
                 motionX,
-                lp.getDeltaMovement().y,
+                delta,
                 motionZ
         );
 
-        incrementTick();
+        this.incrementTick();
         return true;
     }
 }

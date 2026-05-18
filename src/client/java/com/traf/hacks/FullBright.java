@@ -37,16 +37,10 @@ public class FullBright extends Hack {
 
     @Override
     public boolean run(LocalPlayer lp) {
-        if (!this.isOn()) {
-            if (originalGamma != null) {
-                forceGamma(originalGamma);
-                originalGamma = null;
-            }
-            return false;
-        }
-
-        if (originalGamma == null) {
+        if(!this.isOn()){
             originalGamma = mc.options.gamma().get();
+            forceGamma(originalGamma);
+            return false;
         }
 
         if (mc.options.gamma().get() != brightGamma) {
@@ -55,3 +49,16 @@ public class FullBright extends Hack {
         return true;
     }
 }
+
+
+
+//        if (!this.isOn()) {
+//            if (originalGamma != null) {
+//                forceGamma(originalGamma);
+//                originalGamma = null;
+//            }
+//            return false;
+//        }
+//        if (originalGamma == null) {
+//            originalGamma = mc.options.gamma().get();
+//        }

@@ -22,5 +22,6 @@ public abstract class Hack {
     public String getName()           { return name; }
     public void setName(String s)     { name = s; }
 
+    // optional: explains the lifetime of a component
     public void incrementTick()        { currentTick++; }
 }

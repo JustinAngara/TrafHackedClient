@@ -4,7 +4,7 @@ import net.minecraft.client.player.LocalPlayer;
 
 public class VClip extends SubHack {
 
-    private double distance = 20.0;
+    private double distance = 10.0;
 
     public VClip(String s) {
         super(s);
@@ -14,8 +14,11 @@ public class VClip extends SubHack {
     public boolean run(LocalPlayer lp) {
         if (lp == null) return false;
 
-        lp.setPos(lp.getX(), lp.getY() + distance, lp.getZ());
-        lp.setDeltaMovement(lp.getDeltaMovement().x, 0.0, lp.getDeltaMovement().z);
+        lp.setDeltaMovement(
+                lp.getDeltaMovement().x,
+                distance,
+                lp.getDeltaMovement().z
+        );
 
         return true;
     }

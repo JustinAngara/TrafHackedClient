@@ -4,12 +4,21 @@ import com.traf.lifecycle.HandleKBMOutput;
 import net.minecraft.client.player.LocalPlayer;
 
 /**
- * this should send some 'flight' packet every ticket or something
+ * this should send some 'flight' packet every tick or something
  **/
 public class Flight extends Hack {
+
+    double upwardSpeed = 0.15;
+
     public Flight(String s){
         super(s);
     }
+    enum Movement {
+        FORWARD,
+        BACKWARD,
+        LEFT,
+        RIGHT
+    };
 
     public boolean isHoldingSpace(){
         return HandleKBMOutput.isSpaceHeld();
@@ -21,16 +30,18 @@ public class Flight extends Hack {
             return false;
         }
 
-        double upwardSpeed = 0.15; // tweak
-        int[] movement = HandleKBMOutput.getMovementHeld();
+        double delay = .05;
+        int time = getCurrentTick();
+        int[] movement = HandleKBMOutput.getMovementHeld(); // returns the movement keys pressed represented in int
         if(movement.length!=4) return true;
 
         lp.setDeltaMovement(
                 lp.getDeltaMovement().x,
-                upwardSpeed + ( .05 *  getCurrentTick() ),
+                upwardSpeed + ( delay * time ),
                 lp.getDeltaMovement().z
         );
-        incrementTick();
+
+        this.incrementTick();
         return true;
     }
 }

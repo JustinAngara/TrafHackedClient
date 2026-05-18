@@ -1,6 +1,7 @@
 package com.traf.lifecycle;
 
 import com.traf.hacks.*;
+import com.traf.hacks.sub.VClip;
 import com.traf.lifecycle.display.Display;
 import com.traf.hacks.sub.SubHack;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HackManager {
-    private LocalPlayer player;
+    private static LocalPlayer player;
     private List<Hack> hacks = new ArrayList<>();
 
     public HackManager(){
@@ -31,6 +32,9 @@ public class HackManager {
         hacks.add(new Speed("Speed"));
         hacks.add(new AutoHeal("Auto Heal"));
         hacks.add(new AutoAim("Auto Aim"));
+
+
+        hacks.add(new VClip("VClip"));
     }
 
     private ESP setupESP(ESP esp) {
@@ -68,4 +72,5 @@ public class HackManager {
     }
 
     public List<Hack> getAllHacks(){ return hacks; }
+    public static LocalPlayer getPlayer(){ return player; }
 }

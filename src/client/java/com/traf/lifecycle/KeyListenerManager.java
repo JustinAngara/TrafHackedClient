@@ -2,6 +2,7 @@ package com.traf.lifecycle;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.traf.hacks.*;
+import com.traf.hacks.sub.SubHack;
 import com.traf.hacks.sub.VClip;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
@@ -27,7 +28,7 @@ public class KeyListenerManager {
         createKeyBind(this.hm.getHack(ESP.class), "esp", GLFW.GLFW_KEY_Y);
         createKeyBind(this.hm.getHack(XRay.class), "xray", GLFW.GLFW_KEY_X);
 
-        createKeyBind(this.hm.getHack(VClip.class), "vclip", GLFW.GLFW_KEY_F7);
+        createKeyBind(this.hm.getHack(VClip.class), "vclip", GLFW.GLFW_KEY_M);
         createKeyBind(null, "menu", GLFW.GLFW_KEY_RIGHT_SHIFT);
 
     }
@@ -46,6 +47,12 @@ public class KeyListenerManager {
                     continue;
                 }
 
+                // if it is a sub hack we want to call run directly
+                if(temp instanceof SubHack){
+                    SubHack t1 = (SubHack)temp;
+                    t1.run(HackManager.getPlayer());
+                    continue;
+                }
 
                 try{
                     // reverse teh switch
