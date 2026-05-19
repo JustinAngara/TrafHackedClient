@@ -33,8 +33,9 @@ public class HackManager {
         hacks.add(new AutoHeal("Auto Heal"));
         hacks.add(new AutoAim("Auto Aim"));
 
+        hacks.add(new FastMine("Fast Mine"));
 
-        hacks.add(new VClip("VClip"));
+//        hacks.add(new VClip("VClip"));
     }
 
     private ESP setupESP(ESP esp) {

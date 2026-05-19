@@ -28,7 +28,7 @@ public class KeyListenerManager {
         createKeyBind(this.hm.getHack(ESP.class), "esp", GLFW.GLFW_KEY_Y);
         createKeyBind(this.hm.getHack(XRay.class), "xray", GLFW.GLFW_KEY_X);
 
-        createKeyBind(this.hm.getHack(VClip.class), "vclip", GLFW.GLFW_KEY_M);
+//        createKeyBind(this.hm.getHack(VClip.class), "vclip", GLFW.GLFW_KEY_M);
         createKeyBind(null, "menu", GLFW.GLFW_KEY_RIGHT_SHIFT);
 
     }

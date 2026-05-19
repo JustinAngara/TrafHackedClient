@@ -22,8 +22,8 @@ public class Speed extends Hack {
             return true;
         }
 
-        double delay  = 0.05;
-        double maxGrowth = 3.0;
+        double delay  = 0.02;
+        double maxGrowth = 2.0;
         double time   = this.getCurrentTick();
         double growth = Math.min(1 + (delay * time), maxGrowth); // include the max
 
